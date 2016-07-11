@@ -1,0 +1,83 @@
+// Michael Voshell
+// MDF3 - 1606
+// StorageClass.java
+package com.example.mich.allergenrecipe;
+
+import android.content.Context;
+import android.widget.Toast;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+/**
+ * Created by Mich on 6/17/16.
+ */
+public class StorageClass {
+
+    private ArrayList<RecipeData> mWeather;
+
+
+
+
+    public void saveData(ArrayList<RecipeData> PeopleList, Context context, String forcastType)  {
+
+        // creates a var from the item selected to write the data to
+        String FILENAME = forcastType + ".txt";
+
+        try {
+            // writeing the data
+            FileOutputStream fileOutputStream = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
+
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            objectOutputStream.writeObject(PeopleList);
+            objectOutputStream.close();
+
+            // user feedback to let them know the save was successful
+             //Toast.makeText(context, "Saved Succesful", Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(context, "Error Item Not Saved", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(context, "Error Item Not Saved", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // read the data from storage
+    public ArrayList<RecipeData> readFromStorage(Context context, String forcastType){
+
+        // creates a var from the item selected to read the data from
+        String FILENAME = forcastType + ".txt";
+
+        //Toast.makeText(this, FILENAME, Toast.LENGTH_SHORT).show();
+
+        // creates a place to write the data to
+        mWeather = new ArrayList<RecipeData>();
+        try{
+            // read that data
+            FileInputStream fileInputStream = context.openFileInput(FILENAME);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            mWeather = (ArrayList<RecipeData>) objectInputStream.readObject();
+            // Toast.makeText(context,"Read Succesfull", Toast.LENGTH_SHORT).show();
+        }catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+
+        return mWeather;
+    }
+
+
+
+}
+
+
+
+
+
