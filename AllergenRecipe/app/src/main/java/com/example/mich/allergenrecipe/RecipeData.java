@@ -7,6 +7,7 @@
 package com.example.mich.allergenrecipe;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Mich on 6/14/16.
@@ -14,32 +15,32 @@ import java.io.Serializable;
 public class RecipeData implements Serializable {
 
     // Member variables
-    private String mCondititon;
-    private String mValue1;
-    private String mValue2;
-    private String mImageUrl;
+    private String mRecpieName;
+    private String mSmallImageUrls;
+    private String mId;
+    private ArrayList mIngredientsList;
 
 
     //creates the object
-    public RecipeData(String _condititon, String _value1, String _value2, String _imageUrl) {
+    public RecipeData(String _recipeName, String _smallImageUrl, String _id, ArrayList _ingredientsList) {
 
-        mCondititon = _condititon;
-        mValue1 = _value1;
-        mValue2 = _value2;
-        mImageUrl = _imageUrl;
+        mRecpieName = _recipeName;
+        mSmallImageUrls = _smallImageUrl;
+        mId = _id;
+        mIngredientsList = _ingredientsList;
 
     }
 
 
     // Getter methods.
-    public String getCondition() { return mCondititon;}
-    public String getValue1() { return mValue1;}
-    public String getValue2() { return mValue2;}
-    public String getImageUrl() { return mImageUrl;}
+    public String getRecipeName() { return mRecpieName;}
+    public String getSmallImageUrl() { return mSmallImageUrls;}
+    public String getId() { return mId;}
+    public ArrayList getIngredientsList() { return mIngredientsList;}
 
     // Setter Methods
-    public void setCondition(String _condititon) { mCondititon = _condititon; }
-    public void setValue1(String _value1) { mValue1 = _value1; }
-    public void setValue2(String _value2) { mValue2 = _value2; }
-    public void setImageUrl(String _imageUrl) { mImageUrl = _imageUrl; }
+    public void setRecipeName(String _recipeName) { mRecpieName = _recipeName; }
+    public void setSmallImageUrl(String _smallImageUrl) { mSmallImageUrls = _smallImageUrl; }
+    public void setId(String _id) { mId = _id; }
+    public void setIngredientsList(ArrayList _ingredientsList) { mIngredientsList = _ingredientsList; }
 }

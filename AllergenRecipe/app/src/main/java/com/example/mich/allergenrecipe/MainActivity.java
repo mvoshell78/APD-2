@@ -2,15 +2,23 @@ package com.example.mich.allergenrecipe;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    static final android.os.Handler mHandler = new android.os.Handler();
+    public static final String ARG_API_INFO = "apiInfo";
+    static ArrayList<RecipeData> recipeData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent serviceIntent = new Intent(this, apiService.class);
-        //serviceIntent.putExtra(apiService.EXTRA_RESULT_RECEIVER, new forcastResultReceiver());
+        serviceIntent.putExtra(apiService.EXTRA_RESULT_RECEIVER, new apiResultReceiver());
         serviceIntent.putExtra("forecastType", "forecast");
         startService(serviceIntent);
 
@@ -54,5 +62,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class apiResultReceiver extends ResultReceiver {
+
+        public apiResultReceiver() {
+            super(mHandler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+
+           recipeData = (ArrayList<RecipeData>) resultData.getSerializable(ARG_API_INFO);
+        }
     }
 }

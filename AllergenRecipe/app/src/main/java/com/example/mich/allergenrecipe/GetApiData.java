@@ -17,7 +17,7 @@ public class GetApiData {
 
 
     public static ArrayList<RecipeData> getRecipeData() {
-        ArrayList<RecipeData> weatherDataArrayList = null;
+        ArrayList<RecipeData> recpieDataArrayList = null;
         HttpURLConnection connection;
         String forecastType = "";
         String state = "DE";
@@ -74,36 +74,38 @@ public class GetApiData {
                 try {
                     //steps into levels of the JSON data
                     JSONArray levelOne = apiData.getJSONArray("matches");
-                    String condition = "";
+                    recpieDataArrayList = new ArrayList<RecipeData>();
 
-//                JSONObject levelTwo = levelOne.getJSONObject("simpleforecast");
-//                JSONArray levelThree = levelTwo.getJSONArray("forecastday");
-//                JSONObject getDate = levelThree.getJSONObject(1);
-//                JSONObject getDataArray = getDate.getJSONObject("date");
-                    // used for a random number smaller than the size of the number of articles
-//                int arraylength = levelThree.length();
-//                Random rand = new Random();
-//                int randomArticleNumber = rand.nextInt(arraylength);
+                    for (int ii = 0; ii < levelOne.length(); ii++){
+                        JSONObject getArrayAtIndex = levelOne.getJSONObject(ii);
+                        String getRecipeName = getArrayAtIndex.getString("recipeName");
+                        String getImageURL =  getArrayAtIndex.getString("smallImageUrls");
+                        String getRecipeID = getArrayAtIndex.getString("id");
+                        JSONArray getIngredientsList = getArrayAtIndex.getJSONArray("ingredients");
+                        ArrayList ingredientsList = null;
+                        ingredientsList =  new ArrayList();
 
-                    // selects one article and returns it for use
-//                JSONObject levelThree = levelTwo.getJSONObject(randomArticleNumber);
-//                JSONObject articleInfoJson = levelThree.getJSONObject("data");
+                        for (int i=0; i < getIngredientsList.length(); i++){
+                            String ingredient = getIngredientsList.getString(i);
 
-                    String temp;
-                    String dateTime;
-                    String iconUrl;
-                    RecipeData weatherData;
-//                    condition = levelOne.getString("weather");
-//                    temp = levelOne.getString("temp_f");
-//                    dateTime = levelOne.getString("observation_time");
-//                    iconUrl = levelOne.getString("icon_url");
 
-//                    weatherData = new RecipeData(condition,temp,dateTime, iconUrl);
-//
-//                    weatherDataArrayList = new ArrayList<RecipeData>();
-//                    weatherDataArrayList.add(weatherData);
+                            ingredientsList.add(ingredient);
+                        }
+                        RecipeData recipeData;
+                        recipeData = new RecipeData(getRecipeName,getImageURL,getRecipeID,ingredientsList);
+                        recpieDataArrayList.add(recipeData);
+                    }
 
-                    return weatherDataArrayList;
+
+
+
+
+
+
+
+
+
+                    return recpieDataArrayList;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

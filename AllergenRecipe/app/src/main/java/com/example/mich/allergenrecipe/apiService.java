@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
@@ -20,7 +22,8 @@ import java.util.ArrayList;
  */
 public class apiService extends IntentService {
 
-    public static final String EXTRA_RESULT_RECEIVER = "com.fullsail.android.M_Voshell_CE06.EXTRA_RESULT_RECEIVER";
+    public static final String EXTRA_RESULT_RECEIVER = "com.fullsail.android.EXTRA_RESULT_RECEIVER";
+
 
    public apiService(){
        super("apiService");
@@ -46,14 +49,14 @@ public class apiService extends IntentService {
 
         }
 
-//        ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RESULT_RECEIVER);
-//
-//
-//        Bundle dataBundle =  new Bundle();
-//
-//        dataBundle.putSerializable(ForecastActivity.ARG_API_INFO, data);
-//
-//        receiver.send(0, dataBundle);
+        ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RESULT_RECEIVER);
+
+
+        Bundle dataBundle =  new Bundle();
+
+        dataBundle.putSerializable(MainActivity.ARG_API_INFO, data);
+
+        receiver.send(0, dataBundle);
 
 
 
