@@ -16,27 +16,17 @@ import java.util.ArrayList;
 public class GetApiData {
 
 
-    public static ArrayList<RecipeData> getRecipeData(String forecastType, String cityPref) {
+    public static ArrayList<RecipeData> getRecipeData() {
         ArrayList<RecipeData> weatherDataArrayList = null;
         HttpURLConnection connection;
-        String urlType = forecastType;
+        String forecastType = "";
         String state = "DE";
         String city = "Dover";
-        if (city.equals("Dover")){
-             state = "DE";
-            city = cityPref;
-        }
-        if (city.equals("Columbus")){
-            state = "GA";
-            city = cityPref;
-        }
-        if (city.equals("Anchorage")){
-            state = "AK";
-            city = cityPref;
-        }
 
 
-        String urlString = "http://api.wunderground.com/api/d17c1da828371c3e/" + forecastType + "/q/"+ state +"/"+ city+ ".json";
+
+       // String urlString = "http://api.wunderground.com/api/d17c1da828371c3e/" + forecastType + "/q/"+ state +"/"+ city+ ".json";
+        String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=onion+soup";
         String resourceData = "No Data";
 
         try {
@@ -80,10 +70,12 @@ public class GetApiData {
         }
 
         if (apiData != null) {
-            if (forecastType.equals("conditions")){
+
                 try {
                     //steps into levels of the JSON data
-                    JSONObject levelOne = apiData.getJSONObject("current_observation");
+                    JSONArray levelOne = apiData.getJSONArray("matches");
+                    String condition = "";
+
 //                JSONObject levelTwo = levelOne.getJSONObject("simpleforecast");
 //                JSONArray levelThree = levelTwo.getJSONArray("forecastday");
 //                JSONObject getDate = levelThree.getJSONObject(1);
@@ -96,70 +88,28 @@ public class GetApiData {
                     // selects one article and returns it for use
 //                JSONObject levelThree = levelTwo.getJSONObject(randomArticleNumber);
 //                JSONObject articleInfoJson = levelThree.getJSONObject("data");
-                    String condition;
+
                     String temp;
                     String dateTime;
                     String iconUrl;
                     RecipeData weatherData;
-                    condition = levelOne.getString("weather");
-                    temp = levelOne.getString("temp_f");
-                    dateTime = levelOne.getString("observation_time");
-                    iconUrl = levelOne.getString("icon_url");
+//                    condition = levelOne.getString("weather");
+//                    temp = levelOne.getString("temp_f");
+//                    dateTime = levelOne.getString("observation_time");
+//                    iconUrl = levelOne.getString("icon_url");
 
-                    weatherData = new RecipeData(condition,temp,dateTime, iconUrl);
-
-                    weatherDataArrayList = new ArrayList<RecipeData>();
-                    weatherDataArrayList.add(weatherData);
+//                    weatherData = new RecipeData(condition,temp,dateTime, iconUrl);
+//
+//                    weatherDataArrayList = new ArrayList<RecipeData>();
+//                    weatherDataArrayList.add(weatherData);
 
                     return weatherDataArrayList;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-            } if (forecastType.equals("forecast")){
-                try {
-                    JSONObject levelOne = apiData.getJSONObject("forecast");
-                    JSONObject levelTwo = levelOne.getJSONObject("simpleforecast");
-                    JSONArray levelThree = levelTwo.getJSONArray("forecastday");
-
-                    weatherDataArrayList = new ArrayList<RecipeData>();
-
-                    for (int i = 0; i < levelThree.length(); i++){
-                        JSONObject getDay = levelThree.getJSONObject(i);
-                        JSONObject high = getDay.getJSONObject("high");
-                        String highFahrenheit = high.getString("fahrenheit");
-                        JSONObject low = getDay.getJSONObject("low");
-                        String lowFahrenheit = low.getString("fahrenheit");
-                        String iconUrl = getDay.getString("icon_url");
-
-
-                        String condition = getDay.getString("conditions");
-
-                        RecipeData weatherData;
-                        weatherData = new RecipeData(condition,highFahrenheit,lowFahrenheit, iconUrl);
-
-                        weatherDataArrayList.add(weatherData);
-                    }
-
-
-                    return weatherDataArrayList;
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
 
             }
-
-
-
-
             return null;
-        } else {
-            return null;
-        }
 
     }
 }

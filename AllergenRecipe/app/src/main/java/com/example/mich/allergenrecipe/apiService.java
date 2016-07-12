@@ -38,7 +38,7 @@ public class apiService extends IntentService {
         if (isOnline()){
 
 
-            data = GetApiData.getRecipeData(forecastType, cityName);
+            data = GetApiData.getRecipeData();
 
         } else {
            StorageClass storageClass = new StorageClass();
