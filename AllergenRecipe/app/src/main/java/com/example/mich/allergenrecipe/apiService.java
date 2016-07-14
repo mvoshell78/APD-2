@@ -35,22 +35,24 @@ public class apiService extends IntentService {
 
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-        String cityName = SP.getString("city_name", null);
-        String forecastType = intent.getStringExtra("forecastType");
+
+        String searchString = intent.getStringExtra("String");
+
         ArrayList<RecipeData> data = null;
         if (isOnline()){
 
 
-            data = GetApiData.getRecipeData();
+            data = GetApiData.getRecipeData(searchString);
+            StorageClass storageClass = new StorageClass();
+            storageClass.saveData(data, MainActivity.context, searchString);
 
         } else {
            StorageClass storageClass = new StorageClass();
-            data = storageClass.readFromStorage(getBaseContext(),forecastType );
+            data = storageClass.readFromStorage(getBaseContext(),searchString );
 
         }
 
         ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RESULT_RECEIVER);
-
 
         Bundle dataBundle =  new Bundle();
 

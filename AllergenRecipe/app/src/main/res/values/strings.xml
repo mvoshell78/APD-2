@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Allergen Recipe</string>
     <string name="action_settings">Settings</string>
+    <string name="italian">Italian</string>
+    <string name="mexican">Mexican</string>
+    <string name="chineese">Chineese</string>
+    <string name="american">American</string>
+
 </resources>

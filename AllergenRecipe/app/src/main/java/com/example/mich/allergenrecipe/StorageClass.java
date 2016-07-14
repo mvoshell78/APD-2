@@ -6,12 +6,16 @@ package com.example.mich.allergenrecipe;
 import android.content.Context;
 import android.widget.Toast;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 /**
@@ -21,13 +25,14 @@ public class StorageClass {
 
     private ArrayList<RecipeData> mWeather;
 
-
+    static String imageString;
 
 
     public void saveData(ArrayList<RecipeData> PeopleList, Context context, String forcastType)  {
 
         // creates a var from the item selected to write the data to
         String FILENAME = forcastType + ".txt";
+
 
         try {
             // writeing the data
@@ -37,6 +42,22 @@ public class StorageClass {
 
             objectOutputStream.writeObject(PeopleList);
             objectOutputStream.close();
+
+            for (int i = 0; i < PeopleList.size(); i++) {
+            String imageURL = PeopleList.get(i).getSmallImageUrl();
+            imageString = imageURL.toLowerCase().replaceAll("\\s+","").replace("/", "").replace(":", "").replace(".", "").trim();
+            //Download the Image
+            try {
+                URLConnection connection = new URL(imageURL).openConnection();
+                FileOutputStream file = context.openFileOutput(imageString, Context.MODE_PRIVATE);
+                IOUtils.copy(connection.getInputStream(), file);
+                IOUtils.closeQuietly(file);
+
+                } catch (IOException e) {
+
+                e.printStackTrace();
+                }
+            }
 
             // user feedback to let them know the save was successful
              //Toast.makeText(context, "Saved Succesful", Toast.LENGTH_SHORT).show();
@@ -73,7 +94,15 @@ public class StorageClass {
         return mWeather;
     }
 
+    public static String readImageFromStorage(Context context, String urlString){
 
+        String[] filenames = context.fileList();
+        for (String filename : filenames) {
+            if(filename.contains(urlString.toLowerCase().replaceAll("\\s+","").replace("/", "").replace(":", "").replace(".", "").trim()))
+            imageString = filename;
+            }
+        return imageString;
+    }
 
 }
 

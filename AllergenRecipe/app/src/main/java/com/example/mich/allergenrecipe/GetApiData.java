@@ -16,17 +16,17 @@ import java.util.ArrayList;
 public class GetApiData {
 
 
-    public static ArrayList<RecipeData> getRecipeData() {
+    public static ArrayList<RecipeData> getRecipeData(String string) {
         ArrayList<RecipeData> recpieDataArrayList = null;
         HttpURLConnection connection;
-        String forecastType = "";
-        String state = "DE";
-        String city = "Dover";
 
 
 
-       // String urlString = "http://api.wunderground.com/api/d17c1da828371c3e/" + forecastType + "/q/"+ state +"/"+ city+ ".json";
-        String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=onion+soup";
+
+
+       String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=" + string + "&requirePictures=true";
+
+       //String urlString = "http://api.yummly.com/v1/api/recipe/French-Onion-Soup-The-Pioneer-Woman-Cooks-_-Ree-Drummond-41364?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42";
         String resourceData = "No Data";
 
         try {
@@ -79,7 +79,22 @@ public class GetApiData {
                     for (int ii = 0; ii < levelOne.length(); ii++){
                         JSONObject getArrayAtIndex = levelOne.getJSONObject(ii);
                         String getRecipeName = getArrayAtIndex.getString("recipeName");
-                        String getImageURL =  getArrayAtIndex.getString("smallImageUrls");
+                        JSONObject getimageUrl = getArrayAtIndex.getJSONObject("imageUrlsBySize");
+
+                        String getImageURL =  getimageUrl.getString("90");
+                        //getImageURL = getImageURL.replace("", "");
+                        char char4 = getImageURL.charAt(4);
+                        if (Character.toString(char4).matches("s")){
+                            String test = "";
+                        } else {
+
+                            StringBuilder str = new StringBuilder(getImageURL);
+                            str.insert(4, 's');
+                            getImageURL = String.valueOf(str);
+                            String test = "";
+                        }
+
+
                         String getRecipeID = getArrayAtIndex.getString("id");
                         JSONArray getIngredientsList = getArrayAtIndex.getJSONArray("ingredients");
                         ArrayList ingredientsList = null;
@@ -95,15 +110,6 @@ public class GetApiData {
                         recipeData = new RecipeData(getRecipeName,getImageURL,getRecipeID,ingredientsList);
                         recpieDataArrayList.add(recipeData);
                     }
-
-
-
-
-
-
-
-
-
 
                     return recpieDataArrayList;
                 } catch (JSONException e) {
