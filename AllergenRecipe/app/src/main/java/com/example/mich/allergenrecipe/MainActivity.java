@@ -1,6 +1,7 @@
 package com.example.mich.allergenrecipe;
 
 import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +18,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.OnNavigationListener{
@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     Button searchButton;
     EditText searchText;
     String spinnerArray[];
-    static ListView lv;
+    Boolean trueFalse;
+
     static Context context;
 
     @Override
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ArrayList prgmName;
-        lv=(ListView) findViewById(R.id.listView);
+        createFrag();
+
 
         searchButton = (Button) findViewById(R.id.searchButton);
         searchText = (EditText) findViewById(R.id.searchText);
@@ -105,7 +107,12 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
+            createSearchFragment();
+            return true;
+        }
+        if (id == R.id.action_settings){
+       createSettingsFragment();
             return true;
         }
 
@@ -127,7 +134,7 @@ public void searchMethod(View v ){
     }
 
 
-    public static class apiResultReceiver extends ResultReceiver {
+    public class apiResultReceiver extends ResultReceiver {
 
         public apiResultReceiver() {
             super(mHandler);
@@ -138,7 +145,11 @@ public void searchMethod(View v ){
 
 
            recipeData = (ArrayList<RecipeData>) resultData.getSerializable(ARG_API_INFO);
-            setUpList(recipeData);
+
+            ListFragment fragment = (ListFragment) getFragmentManager().findFragmentByTag(ListFragment.TAG);
+
+            fragment.setUpList(recipeData);
+            //setUpList(recipeData);
         }
     }
 
@@ -151,22 +162,76 @@ public void searchMethod(View v ){
         startService(serviceIntent);
 
     }
+    public void createFrag(){
 
-    public static void setUpList(ArrayList<RecipeData> recipeData){
+        getFragmentManager().beginTransaction().replace(R.id.mainContainer,new ListFragment()).commit();
 
-       ArrayList<String> recipieNames = null;
-        ArrayList<String> recipieImageUrl = null;
-        recipieNames = new ArrayList<>();
-        recipieImageUrl = new ArrayList<>();
+        ListFragment fragment = (ListFragment) getFragmentManager().findFragmentByTag(ListFragment.TAG);
+        if (fragment == null){
+            fragment = ListFragment.newInstanceOf(recipeData);
+            getFragmentManager().beginTransaction().replace(R.id.mainContainer,fragment,ListFragment.TAG).commit();
 
-        for (int i=0; i< recipeData.size(); i++){
+        } else {
+            fragment.setUpList(recipeData);
+        }
+    }
 
-            String name = recipeData.get(i).getRecipeName();
-            String imageUrl = recipeData.get(i).getSmallImageUrl();
-            recipieNames.add(name);
-            recipieImageUrl.add(imageUrl);
+    public void createSearchFragment(){
+
+        SearchFragment fragment = (SearchFragment)getFragmentManager().findFragmentByTag(SearchFragment.TAG);
+
+
+            // checking for null
+            if (fragment == null) {
+                fragment = new SearchFragment();
+
+                getFragmentManager().beginTransaction().addToBackStack(SearchFragment.TAG).replace(R.id.searchContainer, fragment, SearchFragment.TAG).commit();
+
+            } else {
+                // if a frag exists update it with the following txt items
+                getFragmentManager().beginTransaction().addToBackStack(SearchFragment.TAG).replace(R.id.searchContainer, fragment, SearchFragment.TAG).commit();
+            }
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.setCustomAnimations(android.R.animator.fade_in,
+                    android.R.animator.fade_out);
+
+            if (fragment.isHidden()) {
+                ft.show(fragment);
+                Log.d("hidden","Show");
+            } else {
+                ft.hide(fragment);
+                Log.d("Shown","Hide");
+            }
+
+            ft.commit();
         }
 
-        lv.setAdapter(new CustomAdapter((MainActivity) context, recipieNames,recipieImageUrl));
+    public void createSettingsFragment(){
+        settingsFragment fragment = (settingsFragment) getFragmentManager().findFragmentByTag(settingsFragment.TAG);
+
+        if (fragment == null){
+            fragment = new settingsFragment();
+        }
+        getFragmentManager().beginTransaction().addToBackStack(settingsFragment.TAG).replace(R.id.settingsContainer, fragment, settingsFragment.TAG).commit();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.animator.fade_in,
+                android.R.animator.fade_out);
+
+        if (fragment.isHidden()) {
+            ft.show(fragment);
+            Log.d("hidden","Show");
+        } else {
+            ft.hide(fragment);
+            Log.d("Shown","Hide");
+        }
+
+        ft.commit();
     }
-}
+
+
+    }
+
+
+
+

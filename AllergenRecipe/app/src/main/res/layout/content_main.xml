@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,30 +11,25 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.mich.allergenrecipe.MainActivity"
     tools:showIn="@layout/activity_main">
-
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/searchText"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/searchButton" />
+        android:layout_alignParentEnd="true"
+        android:id="@+id/mainContainer">
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_height="40dp"
+        android:id="@+id/searchContainer">
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search"
-        android:id="@+id/searchButton"
-        android:onClick="searchMethod"
-        android:layout_alignTop="@+id/searchText"
-        android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_height="match_parent"
+        android:id="@+id/settingsContainer">
+    </RelativeLayout>
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_below="@+id/searchButton"
-        android:layout_alignParentStart="true" />
-</RelativeLayout>
+</FrameLayout>

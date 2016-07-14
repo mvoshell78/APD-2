@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <CheckBoxPreference android:title="Eggs"
+        android:defaultValue="false"
+        android:key="eggs" />
+    <CheckBoxPreference android:title="Tomatoes"
+        android:defaultValue="false"
+        android:key="tomatoes" />
+    <CheckBoxPreference android:title="Tree Nuts"
+        android:defaultValue="false"
+        android:key="treeNuts" />
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+    <!--<CheckBoxPreference android:title="Tomatoes"-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="tomatoes" />-->
+
+
+</PreferenceScreen>
