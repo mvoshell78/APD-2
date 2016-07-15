@@ -1,9 +1,3 @@
-
-
-
-// Michael Voshell
-// MDF3 - 1606
-// WeatherData.java
 package com.example.mich.allergenrecipe;
 
 import java.io.Serializable;
@@ -14,7 +8,7 @@ import java.util.ArrayList;
  */
 public class RecipeData implements Serializable {
 
-    // Member variables
+
     private String mRecpieName;
     private String mSmallImageUrls;
     private String mId;

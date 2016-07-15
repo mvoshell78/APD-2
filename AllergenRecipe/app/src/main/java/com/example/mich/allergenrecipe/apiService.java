@@ -1,7 +1,3 @@
-// Michael Voshell
-// MDF3 - 1606
-// apiService.java
-
 package com.example.mich.allergenrecipe;
 
 import android.app.IntentService;

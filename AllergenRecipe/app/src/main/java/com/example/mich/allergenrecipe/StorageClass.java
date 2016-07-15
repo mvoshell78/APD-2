@@ -1,6 +1,3 @@
-// Michael Voshell
-// MDF3 - 1606
-// StorageClass.java
 package com.example.mich.allergenrecipe;
 
 import android.content.Context;

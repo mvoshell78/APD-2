@@ -27,7 +27,7 @@ public class CustomAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     public CustomAdapter(MainActivity mainActivity, ArrayList<String> recipieNameList, ArrayList<String> recipieImageUrlString) {
 
-        // TODO Auto-generated constructor stub
+
         result = recipieNameList;
         context= mainActivity;
 
@@ -36,29 +36,29 @@ public class CustomAdapter extends BaseAdapter {
     }
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
+
         return result.size();
     }
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
+
         return position;
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
+
         return position;
     }
 
 
 
-    public class Holder
-    {
-        TextView tv;
-        ImageView img;
-    }
+//    public class Holder
+//    {
+//        TextView tv;
+//        ImageView img;
+//    }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -77,12 +77,10 @@ public class CustomAdapter extends BaseAdapter {
         }
 
 
-
-
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+
                 Toast.makeText(context, "You Clicked " + result.get(position), Toast.LENGTH_LONG).show();
             }
         });

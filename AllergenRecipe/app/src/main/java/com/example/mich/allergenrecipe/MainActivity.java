@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,22 +14,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
+
 import android.widget.Spinner;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ActionBar.OnNavigationListener{
+public class MainActivity extends AppCompatActivity implements ActionBar.OnNavigationListener, searchTextInterface{
 
 
     static final android.os.Handler mHandler = new android.os.Handler();
     public static final String ARG_API_INFO = "apiInfo";
     static ArrayList<RecipeData> recipeData;
-    Button searchButton;
-    EditText searchText;
+
     String spinnerArray[];
-    Boolean trueFalse;
+
 
     static Context context;
 
@@ -46,8 +42,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         createFrag();
 
 
-        searchButton = (Button) findViewById(R.id.searchButton);
-        searchText = (EditText) findViewById(R.id.searchText);
+
         context=this;
 
 
@@ -81,15 +76,15 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             }
         });
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
     }
 
     @Override
@@ -118,19 +113,19 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
         return super.onOptionsItemSelected(item);
     }
-public void searchMethod(View v ){
 
-    String searchedText = String.valueOf(searchText.getText());
-
-    searchedText = searchedText.replace(' ','+');
-
-    startIntentService(searchedText);
-
-}
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         return false;
+    }
+
+    @Override
+    public void searchText(String searchTxt) {
+
+        startIntentService(searchTxt);
+        createSearchFragment();
+
     }
 
 
@@ -229,7 +224,17 @@ public void searchMethod(View v ){
         ft.commit();
     }
 
-
+//        public void searchTextListener( ){
+//        searchButton = (ImageButton) getActivity().findViewById(R.id.searchButton);
+//        searchText = (EditText) getActivity().findViewById(R.id.searchText);
+//
+//        String searchedText = String.valueOf(searchText.getText());
+//
+//        searchedText = searchedText.replace(' ','+');
+//
+//        //
+//
+//    }
     }
 
 
