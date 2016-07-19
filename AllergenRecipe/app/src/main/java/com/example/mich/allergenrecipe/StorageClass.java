@@ -25,10 +25,10 @@ public class StorageClass {
     static String imageString;
 
 
-    public void saveData(ArrayList<RecipeData> PeopleList, Context context, String forcastType)  {
+    public void saveData(ArrayList<RecipeData> PeopleList, Context context, String storageType)  {
 
         // creates a var from the item selected to write the data to
-        String FILENAME = forcastType + ".txt";
+        String FILENAME = storageType + ".txt";
 
 
         try {

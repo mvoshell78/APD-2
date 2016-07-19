@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,7 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -27,7 +29,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     static ArrayList<RecipeData> recipeData;
 
     String spinnerArray[];
-
+    ArrayList<AllergenListData> allergenListData;
+    ProgressBar progressBar;
 
     static Context context;
 
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ArrayList prgmName;
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
         createFrag();
 
 
@@ -52,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
         spinnerArray = new String[]{"Favorites","American", "Chineese", "Italian", "Mexican"};
 
+
+
 //        Spinner spinner = new Spinner(this);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -64,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
                 if (i > 0 ){
                 String getItemSelected = spinnerArray[i];
+                progressBar.setVisibility(View.VISIBLE);
                 startIntentService(getItemSelected);
                 }
 
@@ -76,15 +84,15 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             }
         });
 
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @Override
@@ -137,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
+            progressBar.setVisibility(View.GONE);
 
 
            recipeData = (ArrayList<RecipeData>) resultData.getSerializable(ARG_API_INFO);
@@ -215,7 +224,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
         if (fragment.isHidden()) {
             ft.show(fragment);
-            Log.d("hidden","Show");
+
+
+
+
         } else {
             ft.hide(fragment);
             Log.d("Shown","Hide");

@@ -21,10 +21,23 @@ public class GetApiData {
         HttpURLConnection connection;
 
 
+        StorePreferencesClass storePreferencesClass = new StorePreferencesClass();
+        ArrayList<AllergenListData> allergenListDatas = storePreferencesClass.readFromStorage(MainActivity.context,"allergenList");
+        ArrayList<AllergenListData> yourAllergenListDatas = storePreferencesClass.readFromStorage(MainActivity.context,"yourAllergenList");
+        String allergenExclusion = "";
+        String exclusionText =   "&excludedIngredient[]=";
+        for (int i =0; i< allergenListDatas.size(); i++){
+            if (allergenListDatas.get(i).getBool() == true){
+
+                allergenExclusion = allergenExclusion + exclusionText + allergenListDatas.get(i).getAllergenKey();
+            }
+        }
+        for (int i =0; i< yourAllergenListDatas.size(); i++){
+            allergenExclusion = allergenExclusion + exclusionText + yourAllergenListDatas.get(i).getAllergenKey();
+        }
 
 
-
-       String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=" + string + "&requirePictures=true";
+       String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=" + string + "&requirePictures=true" + allergenExclusion +"&maxResult=50";
 
        //String urlString = "http://api.yummly.com/v1/api/recipe/French-Onion-Soup-The-Pioneer-Woman-Cooks-_-Ree-Drummond-41364?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42";
         String resourceData = "No Data";
@@ -85,13 +98,13 @@ public class GetApiData {
                         //getImageURL = getImageURL.replace("", "");
                         char char4 = getImageURL.charAt(4);
                         if (Character.toString(char4).matches("s")){
-                            String test = "";
+
                         } else {
 
                             StringBuilder str = new StringBuilder(getImageURL);
                             str.insert(4, 's');
                             getImageURL = String.valueOf(str);
-                            String test = "";
+
                         }
 
 

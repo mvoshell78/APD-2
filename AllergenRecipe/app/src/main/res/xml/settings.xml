@@ -1,70 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Add Allergens">
+        <EditTextPreference
+            android:title="Add to your list of allergens"
+            android:key="addAllergens"/>
+    </PreferenceCategory>
 
+    <PreferenceCategory android:title=""></PreferenceCategory>
 
-    <CheckBoxPreference android:title="Eggs"
-        android:defaultValue="false"
-        android:key="eggs" />
-    <CheckBoxPreference android:title="Tomatoes"
-        android:defaultValue="false"
-        android:key="tomatoes" />
-    <CheckBoxPreference android:title="Tree Nuts"
-        android:defaultValue="false"
-        android:key="treeNuts" />
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
-    <!--<CheckBoxPreference android:title="Tomatoes"-->
-        <!--android:defaultValue="false"-->
-        <!--android:key="tomatoes" />-->
+    <!--<PreferenceCategory android:title="Remove Allergens">-->
+        <!--<ListPreference-->
+            <!--android:key="language"-->
+            <!--android:title="Language"-->
+            <!--android:dialogTitle="Application language"-->
+            <!--android:summary="Select the Application language"-->
+            <!--/>-->
+    <!--</PreferenceCategory>-->
+
+    <PreferenceCategory android:title="Remove Allergens">
+        <EditTextPreference
+            android:title="Remove allergens from your list"
+            android:key="removeAllergens"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title=""></PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="added_allergies"
+        android:title="Your added allergens">
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title=""></PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="allergy_list"
+        android:title="Allergen List">
+    </PreferenceCategory>
+
 
 
 </PreferenceScreen>
