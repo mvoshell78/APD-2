@@ -6,31 +6,24 @@
             android:key="addAllergens"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title=""></PreferenceCategory>
+    <!--<PreferenceCategory android:title=""></PreferenceCategory>-->
 
-    <!--<PreferenceCategory android:title="Remove Allergens">-->
-        <!--<ListPreference-->
-            <!--android:key="language"-->
-            <!--android:title="Language"-->
-            <!--android:dialogTitle="Application language"-->
-            <!--android:summary="Select the Application language"-->
-            <!--/>-->
-    <!--</PreferenceCategory>-->
+    <PreferenceCategory
+        android:key="remove_allergen_list"
+        android:title="Remove Allergens">
 
-    <PreferenceCategory android:title="Remove Allergens">
-        <EditTextPreference
-            android:title="Remove allergens from your list"
-            android:key="removeAllergens"/>
+
     </PreferenceCategory>
 
-    <PreferenceCategory android:title=""></PreferenceCategory>
+
+    <!--<PreferenceCategory android:title=""></PreferenceCategory>-->
 
     <PreferenceCategory
         android:key="added_allergies"
         android:title="Your added allergens">
     </PreferenceCategory>
 
-    <PreferenceCategory android:title=""></PreferenceCategory>
+    <!--<PreferenceCategory android:title=""></PreferenceCategory>-->
 
     <PreferenceCategory
         android:key="allergy_list"

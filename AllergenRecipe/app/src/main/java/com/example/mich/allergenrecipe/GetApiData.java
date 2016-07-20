@@ -23,7 +23,7 @@ public class GetApiData {
 
         StorePreferencesClass storePreferencesClass = new StorePreferencesClass();
         ArrayList<AllergenListData> allergenListDatas = storePreferencesClass.readFromStorage(MainActivity.context,"allergenList");
-        ArrayList<AllergenListData> yourAllergenListDatas = storePreferencesClass.readFromStorage(MainActivity.context,"yourAllergenList");
+        ArrayList<AllergenListData> yourAllergenListDatas = storePreferencesClass.readFromStorage(MainActivity.context,"yourAllergenListArray");
         String allergenExclusion = "";
         String exclusionText =   "&excludedIngredient[]=";
         for (int i =0; i< allergenListDatas.size(); i++){

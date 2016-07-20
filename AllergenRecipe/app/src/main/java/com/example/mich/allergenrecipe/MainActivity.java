@@ -10,10 +10,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
@@ -27,9 +27,15 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     static final android.os.Handler mHandler = new android.os.Handler();
     public static final String ARG_API_INFO = "apiInfo";
     static ArrayList<RecipeData> recipeData;
+    settingsFragment fragment;
+    SearchFragment searchFrag;
+    boolean selectedSettings = false;
+    boolean selectedSearch = false;
+
+
 
     String spinnerArray[];
-    ArrayList<AllergenListData> allergenListData;
+    FloatingActionButton fab;
     ProgressBar progressBar;
 
     static Context context;
@@ -41,10 +47,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ArrayList prgmName;
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         createFrag();
+
 
 
 
@@ -68,12 +75,16 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {
 
+                if (i == 0){
 
+                    fab.hide();
+                }
                 if (i > 0 ){
                 String getItemSelected = spinnerArray[i];
-                progressBar.setVisibility(View.VISIBLE);
+
                 startIntentService(getItemSelected);
                 }
+
 
 
             }
@@ -85,14 +96,21 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         });
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                        Snackbar.make(view, "next", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+
+
+
+            });
+        fab.hide();
+
     }
 
     @Override
@@ -111,11 +129,55 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-            createSearchFragment();
+
+
+            if (selectedSearch == true){
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+
+                if (searchFrag.isHidden()) {
+                    fragmentTransaction.show(searchFrag);
+
+                } else {
+                    fragmentTransaction.hide(searchFrag);
+                    View view = this.getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+
+                fragmentTransaction.commit();
+            } else {
+                createSearchFragment();
+            }
+
             return true;
         }
         if (id == R.id.action_settings){
-       createSettingsFragment();
+
+
+           if (selectedSettings == true){
+               FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+               fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+
+
+               if (fragment.isHidden()) {
+                   fragmentTransaction.show(fragment);
+                   fab.hide();
+
+
+               } else {
+                   fragmentTransaction.hide(fragment);
+                   fab.show();
+
+               }
+
+               fragmentTransaction.commit();
+           } else {
+               createSettingsFragment();
+           }
+
             return true;
         }
 
@@ -136,7 +198,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
     }
 
-
     public class apiResultReceiver extends ResultReceiver {
 
         public apiResultReceiver() {
@@ -148,12 +209,14 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             progressBar.setVisibility(View.GONE);
 
 
-           recipeData = (ArrayList<RecipeData>) resultData.getSerializable(ARG_API_INFO);
+
+            fab.show();
+            recipeData = (ArrayList<RecipeData>) resultData.getSerializable(ARG_API_INFO);
 
             ListFragment fragment = (ListFragment) getFragmentManager().findFragmentByTag(ListFragment.TAG);
 
             fragment.setUpList(recipeData);
-            //setUpList(recipeData);
+
         }
     }
 
@@ -162,10 +225,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         Intent serviceIntent = new Intent(this, apiService.class);
         serviceIntent.putExtra(apiService.EXTRA_RESULT_RECEIVER, new apiResultReceiver());
         serviceIntent.putExtra("String", string);
-
+        progressBar.setVisibility(View.VISIBLE);
         startService(serviceIntent);
 
     }
+
     public void createFrag(){
 
         getFragmentManager().beginTransaction().replace(R.id.mainContainer,new ListFragment()).commit();
@@ -182,71 +246,31 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
     public void createSearchFragment(){
 
-        SearchFragment fragment = (SearchFragment)getFragmentManager().findFragmentByTag(SearchFragment.TAG);
+        searchFrag = (SearchFragment)getFragmentManager().findFragmentByTag(SearchFragment.TAG);
 
 
             // checking for null
-            if (fragment == null) {
-                fragment = new SearchFragment();
+            if (searchFrag == null) {
+                searchFrag = new SearchFragment();
 
-                getFragmentManager().beginTransaction().addToBackStack(SearchFragment.TAG).replace(R.id.searchContainer, fragment, SearchFragment.TAG).commit();
-
-            } else {
-                // if a frag exists update it with the following txt items
-                getFragmentManager().beginTransaction().addToBackStack(SearchFragment.TAG).replace(R.id.searchContainer, fragment, SearchFragment.TAG).commit();
             }
 
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.setCustomAnimations(android.R.animator.fade_in,
-                    android.R.animator.fade_out);
+        getFragmentManager().beginTransaction().addToBackStack(SearchFragment.TAG).replace(R.id.searchContainer, searchFrag, SearchFragment.TAG).commit();
+        selectedSearch = true;
 
-            if (fragment.isHidden()) {
-                ft.show(fragment);
-                Log.d("hidden","Show");
-            } else {
-                ft.hide(fragment);
-                Log.d("Shown","Hide");
-            }
-
-            ft.commit();
         }
 
     public void createSettingsFragment(){
-        settingsFragment fragment = (settingsFragment) getFragmentManager().findFragmentByTag(settingsFragment.TAG);
+       fragment = (settingsFragment) getFragmentManager().findFragmentByTag(settingsFragment.TAG);
 
         if (fragment == null){
             fragment = new settingsFragment();
         }
         getFragmentManager().beginTransaction().addToBackStack(settingsFragment.TAG).replace(R.id.settingsContainer, fragment, settingsFragment.TAG).commit();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.animator.fade_in,
-                android.R.animator.fade_out);
-
-        if (fragment.isHidden()) {
-            ft.show(fragment);
-
-
-
-
-        } else {
-            ft.hide(fragment);
-            Log.d("Shown","Hide");
-        }
-
-        ft.commit();
+            selectedSettings = true;
     }
 
-//        public void searchTextListener( ){
-//        searchButton = (ImageButton) getActivity().findViewById(R.id.searchButton);
-//        searchText = (EditText) getActivity().findViewById(R.id.searchText);
-//
-//        String searchedText = String.valueOf(searchText.getText());
-//
-//        searchedText = searchedText.replace(' ','+');
-//
-//        //
-//
-//    }
+
     }
 
 

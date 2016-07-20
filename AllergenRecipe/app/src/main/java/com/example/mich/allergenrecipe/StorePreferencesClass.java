@@ -19,7 +19,7 @@ public class StorePreferencesClass {
 
     public void saveData(ArrayList<AllergenListData> PeopleList, Context context, String storageType)  {
 
-    // creates a var from the item selected to write the data to
+    // creates a var from the item selectedSettings to write the data to
     String FILENAME = storageType + ".txt";
 
 
@@ -47,7 +47,7 @@ public class StorePreferencesClass {
     // read the data from storage
     public ArrayList<AllergenListData> readFromStorage(Context context, String storageType){
 
-        // creates a var from the item selected to read the data from
+        // creates a var from the item selectedSettings to read the data from
         String FILENAME = storageType + ".txt";
 
         //Toast.makeText(this, FILENAME, Toast.LENGTH_SHORT).show();

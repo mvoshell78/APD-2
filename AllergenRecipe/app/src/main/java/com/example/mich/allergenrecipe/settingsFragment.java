@@ -1,9 +1,11 @@
 
 package com.example.mich.allergenrecipe;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -18,10 +20,13 @@ import java.util.ArrayList;
 
 public class settingsFragment extends PreferenceFragment {
     public static final String TAG = "settingsFragment";
-    static ArrayList<AllergenListData> allergenList;
-    static ArrayList<AllergenListData> yourAllergenList;
+    static ArrayList<AllergenListData> yourAllergenListArray;
     EditTextPreference addAllergensPreference;
     StorePreferencesClass storePreferencesClass;
+    static String[] entry;
+    static String[] entryValues;
+    final private String custom_list = "custom_list";
+    String yourAllergenList ="yourAllergenList";
 
 
 
@@ -34,35 +39,103 @@ public class settingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.settings);
 
         storePreferencesClass = new StorePreferencesClass();
-        yourAllergenList = storePreferencesClass.readFromStorage(getContext(),"yourAllergenList");
+        yourAllergenListArray = storePreferencesClass.readFromStorage(getContext(),yourAllergenList);
 
-//
+        addToYourAllergensPreference();
+        removeFromYourAllergensPreference();
+        checkBoxOfAddedAllergensPreference();
+        stockAllergenPreference();
+    }
 
-        for (int i=0; i< yourAllergenList.size();i++){
 
-//            ArrayList<String> entry = new ArrayList();
-//            entry.add(yourAllergenLi)
-//            ListPreference listPreference = new ListPreference(getContext());
-//
-//            listPreference.setEntries(Integer.parseInt(yourAllergenList.get(i).getAllergenName()));
-//            listPreference.setEntryValues(Integer.parseInt(yourAllergenList.get(i).getAllergenKey()));
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        view.setBackgroundColor(getResources().getColor(android.R.color.background_light));
+
+        return view;
+    }
+
+    private void addToYourAllergensPreference() {
+        addAllergensPreference = (EditTextPreference) findPreference("addAllergens");
+        addAllergensPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String addAllergensPreferenceText = (String) newValue;
+                createCheckBoxPreference(addAllergensPreferenceText);
+                removeFromYourAllergensPreference();
+                return false;
+            }
+        });
+    }
+    private void removeFromYourAllergensPreference() {
+        storePreferencesClass = new StorePreferencesClass();
+        yourAllergenListArray = storePreferencesClass.readFromStorage(getContext(),yourAllergenList);
+
+        entry = new String[yourAllergenListArray.size()];
+        entryValues = new String[yourAllergenListArray.size()];
+
+        for (int i = 0; i< yourAllergenListArray.size(); i++){
+            entry[i]= yourAllergenListArray.get(i).getAllergenName();
+            entryValues[i]= yourAllergenListArray.get(i).getAllergenName();
+        }
+
+
+        PreferenceCategory category = (PreferenceCategory) findPreference("remove_allergen_list");
+        final ListPreference lp = setListPreferenceData((ListPreference) findPreference(custom_list), getActivity());
+        lp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+
+                setListPreferenceData(lp, getActivity());
+                return false;
+            }
+        });
+
+        lp.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                String selectedItem =  newValue.toString();
+                selectedItem = selectedItem.toLowerCase();
+
+                for (int i = 0; i< yourAllergenListArray.size(); i++){
+                    if (yourAllergenListArray.get(i).getAllergenKey().equals(selectedItem)){
+
+                        yourAllergenListArray.remove(i);
+                        storePreferencesClass.saveData(yourAllergenListArray,getContext(),"yourAllergenListArray");
+                        removeFromYourAllergensPreference();
+                        removeCheckBoxPreference(selectedItem);
+
+                    }
+                }
+                return false;
+            }
+        });
+        setHasOptionsMenu(true);
+        category.addPreference(lp);
+    }
+    public void checkBoxOfAddedAllergensPreference(){
+        for (int i = 0; i< yourAllergenListArray.size(); i++){
+
             PreferenceCategory category = (PreferenceCategory)findPreference("added_allergies");
 
             CheckBoxPreference checkboxPref = new CheckBoxPreference(getContext());
 
-            checkboxPref.setTitle(yourAllergenList.get(i).getAllergenName());
-            checkboxPref.setKey(yourAllergenList.get(i).getAllergenKey());
-            checkboxPref.setChecked(yourAllergenList.get(i).getBool());
+            checkboxPref.setTitle(yourAllergenListArray.get(i).getAllergenName());
+            checkboxPref.setKey(yourAllergenListArray.get(i).getAllergenKey());
+            checkboxPref.setChecked(yourAllergenListArray.get(i).getBool());
             category.addPreference(checkboxPref);
-            Preference myCheckbox = findPreference(yourAllergenList.get(i).getAllergenKey());
+            Preference myCheckbox = findPreference(yourAllergenListArray.get(i).getAllergenKey());
             myCheckbox.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                    for (int i =0; i<yourAllergenList.size(); i++){
-                        if (preference.getKey().equals(yourAllergenList.get(i).getAllergenKey())){
-                            yourAllergenList.get(i).setBool((Boolean) newValue);
-                            storePreferencesClass.saveData(yourAllergenList, getContext(),"yourAllergenList");
+                    for (int i = 0; i< yourAllergenListArray.size(); i++){
+                        if (preference.getKey().equals(yourAllergenListArray.get(i).getAllergenKey())){
+                            yourAllergenListArray.get(i).setBool((Boolean) newValue);
+                            storePreferencesClass.saveData(yourAllergenListArray, getContext(),yourAllergenList);
                         }
 
 
@@ -75,7 +148,9 @@ public class settingsFragment extends PreferenceFragment {
             });
 
         }
-        //String allergenList[] = new String[] {"eggs","tomatoes","treeNuts"};
+
+    }
+    public void stockAllergenPreference(){
         AllergenListData eggs =  new AllergenListData("Eggs","eggs",false);
         AllergenListData tomatoes =  new AllergenListData("Tomatoes","tomatoes",false);
         AllergenListData walnuts =  new AllergenListData("Walnuts","walnuts",false);
@@ -140,35 +215,7 @@ public class settingsFragment extends PreferenceFragment {
             });
         }
 
-        addAllergensPreference = (EditTextPreference) findPreference("addAllergens");
-        addAllergensPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String addAllergensPreferenceText = (String) newValue;
-                createCheckBoxPreference(addAllergensPreferenceText);
-                return false;
-            }
-        });
-
-        final Preference removeAllergensPreference = getPreferenceManager().findPreference("removeAllergens");
-        removeAllergensPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String removeAllergensPreferenceText = (String) newValue;
-                removeCheckBoxPreference(removeAllergensPreferenceText);
-                return false;
-            }
-        });
     }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        view.setBackgroundColor(getResources().getColor(android.R.color.background_light));
-
-        return view;
-    }
-
 
     public void createCheckBoxPreference(final String addAllergensPreferenceText){
         // adds a new check box preference
@@ -183,18 +230,19 @@ public class settingsFragment extends PreferenceFragment {
         category.addPreference(checkboxPref);
         AllergenListData yourAllergen =  new AllergenListData(addAllergensPreferenceText,addAllergensPreferenceText.toLowerCase(),true);
 
-        yourAllergenList.add(yourAllergen);
-        storePreferencesClass.saveData(yourAllergenList,getContext(),"yourAllergenList");
+        yourAllergenListArray.add(yourAllergen);
+        storePreferencesClass.saveData(yourAllergenListArray,getContext(),"yourAllergenListArray");
         Preference myCheckbox = findPreference(addAllergensPreferenceText);
         myCheckbox.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                for (int i =0; i<yourAllergenList.size(); i++){
-                    if (String.valueOf(addAllergensPreferenceText.toLowerCase()).equals(String.valueOf(preference.getKey()))) {
-                       yourAllergenList.get(i).setBool((Boolean) newValue);
-                        storePreferencesClass.saveData(yourAllergenList,getContext(),"yourAllergenList");
+                for (int i = 0; i< yourAllergenListArray.size(); i++){
 
-                        String Checked = "";
+                    if (String.valueOf(addAllergensPreferenceText.toLowerCase()).equals(String.valueOf(preference.getKey()))) {
+                       yourAllergenListArray.get(i).setBool((Boolean) newValue);
+                        storePreferencesClass.saveData(yourAllergenListArray,getContext(),"yourAllergenListArray");
+
+
                     }
                 }
 
@@ -204,7 +252,6 @@ public class settingsFragment extends PreferenceFragment {
 
 
     }
-
     public void removeCheckBoxPreference(String removeAllergensPreferenceText){
         // removes preferences from the list
         removeAllergensPreferenceText = removeAllergensPreferenceText.toLowerCase();
@@ -219,15 +266,27 @@ public class settingsFragment extends PreferenceFragment {
        }
 
         storePreferencesClass = new StorePreferencesClass();
-        yourAllergenList = storePreferencesClass.readFromStorage(getContext(),"yourAllergenList");
-        for (int i=0; i<yourAllergenList.size();i++){
-            if (yourAllergenList.get(i).getAllergenKey().equals(removeAllergensPreferenceText)){
-                yourAllergenList.remove(i);
+        yourAllergenListArray = storePreferencesClass.readFromStorage(getContext(),"yourAllergenListArray");
+        for (int i = 0; i< yourAllergenListArray.size(); i++){
+            if (yourAllergenListArray.get(i).getAllergenKey().equals(removeAllergensPreferenceText)){
+                yourAllergenListArray.remove(i);
             }
         }
 
 
     }
+    protected ListPreference setListPreferenceData(ListPreference lp, Activity mActivity) {
 
+        if(lp == null)
+            lp = new ListPreference(mActivity);
+        lp.setEntries(entry);
+        lp.setDefaultValue("1");
+        lp.setEntryValues(entryValues);
+        lp.setTitle("Remove allergens from your list");
+        lp.setSummary(lp.getEntry());
+        lp.setDialogTitle("Select to remove");
+        lp.setKey(custom_list);
+        return lp;
+    }
 
 }
