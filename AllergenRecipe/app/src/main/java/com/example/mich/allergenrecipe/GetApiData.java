@@ -1,5 +1,8 @@
 package com.example.mich.allergenrecipe;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,20 +27,29 @@ public class GetApiData {
         StorePreferencesClass storePreferencesClass = new StorePreferencesClass();
         ArrayList<AllergenListData> allergenListDatas = storePreferencesClass.readFromStorage(MainActivity.context,"allergenList");
         ArrayList<AllergenListData> yourAllergenListDatas = storePreferencesClass.readFromStorage(MainActivity.context,"yourAllergenListArray");
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(MainActivity.context);
+
+        String resultNumber = SP.getString("results","10");
         String allergenExclusion = "";
         String exclusionText =   "&excludedIngredient[]=";
         for (int i =0; i< allergenListDatas.size(); i++){
             if (allergenListDatas.get(i).getBool() == true){
 
                 allergenExclusion = allergenExclusion + exclusionText + allergenListDatas.get(i).getAllergenKey();
+
             }
         }
         for (int i =0; i< yourAllergenListDatas.size(); i++){
             allergenExclusion = allergenExclusion + exclusionText + yourAllergenListDatas.get(i).getAllergenKey();
         }
 
+        // if the user has spaces in their added allergens spaces crash the api
+        // this removes the spaces between words to prevent a crash
+        if (!allergenExclusion.equals("")){
+                allergenExclusion = allergenExclusion.replaceAll(" ","");
+            }
 
-       String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=" + string + "&requirePictures=true" + allergenExclusion +"&maxResult=50";
+       String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=" + string + "&requirePictures=true" + allergenExclusion +"&maxResult=" + resultNumber;
 
        //String urlString = "http://api.yummly.com/v1/api/recipe/French-Onion-Soup-The-Pioneer-Woman-Cooks-_-Ree-Drummond-41364?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42";
         String resourceData = "No Data";

@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 /**
@@ -71,15 +69,15 @@ public class CustomAdapter extends BaseAdapter {
         String urlString = imageId.get(position);
         String filename = StorageClass.readImageFromStorage(context, urlString);
         textView.setText(result.get(position));
-        new DownloadImageTask((ImageView) imageView).execute(urlString);
-//        try {
-//
-//            //imageView.setImageBitmap(copyBitmap(BitmapFactory.decodeStream(context.openFileInput(filename))));
-//        } catch (FileNotFoundException e) {
-//            //System.out.println(TAG + "Problem setting the image.");
-//            e.printStackTrace();
-//        }
-//
+
+        try {
+
+            imageView.setImageBitmap(copyBitmap(BitmapFactory.decodeStream(context.openFileInput(filename))));
+        } catch (FileNotFoundException e) {
+            //System.out.println(TAG + "Problem setting the image.");
+            e.printStackTrace();
+        }
+
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,28 +97,5 @@ public class CustomAdapter extends BaseAdapter {
         return copy;
     }
 
-    private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 }

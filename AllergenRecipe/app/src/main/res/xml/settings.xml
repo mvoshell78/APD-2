@@ -6,7 +6,7 @@
             android:key="addAllergens"/>
     </PreferenceCategory>
 
-    <!--<PreferenceCategory android:title=""></PreferenceCategory>-->
+
 
     <PreferenceCategory
         android:key="remove_allergen_list"
@@ -16,14 +16,24 @@
     </PreferenceCategory>
 
 
-    <!--<PreferenceCategory android:title=""></PreferenceCategory>-->
-
+    <PreferenceCategory android:title=""></PreferenceCategory>
+    <PreferenceCategory
+        android:key="results"
+        android:title="Search Results">
+        <ListPreference
+            android:title="Search results per page"
+            android:key="results"
+            android:defaultValue="10"
+            android:entries="@array/listArray"
+            android:entryValues="@array/listValues" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title=""></PreferenceCategory>
     <PreferenceCategory
         android:key="added_allergies"
         android:title="Your added allergens">
     </PreferenceCategory>
 
-    <!--<PreferenceCategory android:title=""></PreferenceCategory>-->
+
 
     <PreferenceCategory
         android:key="allergy_list"

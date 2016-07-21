@@ -175,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
                fragmentTransaction.commit();
            } else {
+               fab.hide();
                createSettingsFragment();
            }
 
