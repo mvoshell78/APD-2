@@ -25,15 +25,17 @@ public class CustomAdapter extends BaseAdapter {
     Context context;
 
     private static LayoutInflater inflater = null;
+
     public CustomAdapter(MainActivity mainActivity, ArrayList<String> recipieNameList, ArrayList<String> recipieImageUrlString) {
 
 
         result = recipieNameList;
-        context= mainActivity;
+        context = mainActivity;
 
         imageId = recipieImageUrlString;
-        inflater = ( LayoutInflater )context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
     @Override
     public int getCount() {
 
@@ -53,8 +55,7 @@ public class CustomAdapter extends BaseAdapter {
     }
 
 
-
-//    public class Holder
+    //    public class Holder
 //    {
 //        TextView tv;
 //        ImageView img;
@@ -64,7 +65,7 @@ public class CustomAdapter extends BaseAdapter {
 
         View rowView = inflater.inflate(R.layout.recipie_list, null);
 
-        TextView textView =(TextView) rowView.findViewById(R.id.textView1);
+        TextView textView = (TextView) rowView.findViewById(R.id.textView1);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
         String urlString = imageId.get(position);
         String filename = StorageClass.readImageFromStorage(context, urlString);
@@ -74,7 +75,7 @@ public class CustomAdapter extends BaseAdapter {
 
             imageView.setImageBitmap(copyBitmap(BitmapFactory.decodeStream(context.openFileInput(filename))));
         } catch (FileNotFoundException e) {
-            //System.out.println(TAG + "Problem setting the image.");
+            Toast.makeText(MainActivity.context, "image not set", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
@@ -91,11 +92,16 @@ public class CustomAdapter extends BaseAdapter {
 
 
     public static Bitmap copyBitmap(Bitmap bmp) {
-        Bitmap copy = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas copyCanvas = new Canvas(copy);
-        copyCanvas.drawBitmap(bmp, new Matrix(), null);
-        return copy;
+        try {
+            Bitmap copy = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas copyCanvas = new Canvas(copy);
+            copyCanvas.drawBitmap(bmp, new Matrix(), null);
+            return copy;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        return null;
     }
-
-
 }

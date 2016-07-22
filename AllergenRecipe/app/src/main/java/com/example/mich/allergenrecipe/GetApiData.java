@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class GetApiData {
 
 
-    public static ArrayList<RecipeData> getRecipeData(String string) {
+    public static ArrayList<RecipeData> getRecipeData(String string, int startNumber) {
         ArrayList<RecipeData> recpieDataArrayList = null;
         HttpURLConnection connection;
 
@@ -30,6 +30,7 @@ public class GetApiData {
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(MainActivity.context);
 
         String resultNumber = SP.getString("results","10");
+
         String allergenExclusion = "";
         String exclusionText =   "&excludedIngredient[]=";
         for (int i =0; i< allergenListDatas.size(); i++){
@@ -49,7 +50,8 @@ public class GetApiData {
                 allergenExclusion = allergenExclusion.replaceAll(" ","");
             }
 
-       String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=" + string + "&requirePictures=true" + allergenExclusion +"&maxResult=" + resultNumber;
+
+        String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=" + string + "&requirePictures=true" + allergenExclusion +"&maxResult=" + resultNumber +"&start=" + startNumber;
 
        //String urlString = "http://api.yummly.com/v1/api/recipe/French-Onion-Soup-The-Pioneer-Woman-Cooks-_-Ree-Drummond-41364?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42";
         String resourceData = "No Data";

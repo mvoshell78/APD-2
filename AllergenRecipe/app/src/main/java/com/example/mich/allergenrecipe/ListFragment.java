@@ -51,6 +51,8 @@ public class ListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_fragement, container, false);
         lv = (ListView) v.findViewById(R.id.listView);
+
+
         return v;
     }
 

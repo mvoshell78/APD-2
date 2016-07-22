@@ -46,6 +46,8 @@ public class StorageClass {
             //Download the Image
             try {
                 URLConnection connection = new URL(imageURL).openConnection();
+                connection.setConnectTimeout(10000); // 10 seconds
+                connection.setReadTimeout(10000);
                 FileOutputStream file = context.openFileOutput(imageString, Context.MODE_PRIVATE);
                 IOUtils.copy(connection.getInputStream(), file);
                 IOUtils.closeQuietly(file);

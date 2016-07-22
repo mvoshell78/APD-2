@@ -4,10 +4,11 @@ import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     SearchFragment searchFrag;
     boolean selectedSettings = false;
     boolean selectedSearch = false;
+    int startNumber;
+    String getItemSelected;
 
 
 
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         createFrag();
+        startNumber = 0;
+
 
 
 
@@ -80,9 +85,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
                     fab.hide();
                 }
                 if (i > 0 ){
-                String getItemSelected = spinnerArray[i];
+                getItemSelected = spinnerArray[i];
+                startNumber = 0;
 
-                startIntentService(getItemSelected);
+                startIntentService(getItemSelected, startNumber);
                 }
 
 
@@ -100,10 +106,15 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(MainActivity.context);
 
+                    String number = SP.getString("results","10");
+                    int num = startNumber;
+                    int resultNumber = Integer.parseInt(number);
 
-                        Snackbar.make(view, "next", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                    startNumber = startNumber + resultNumber;
+
+                    startIntentService(getItemSelected, startNumber);
                     }
 
 
@@ -193,8 +204,9 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
     @Override
     public void searchText(String searchTxt) {
-
-        startIntentService(searchTxt);
+         startNumber = 0;
+        getItemSelected = searchTxt;
+        startIntentService(searchTxt, startNumber);
         createSearchFragment();
 
     }
@@ -221,11 +233,12 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         }
     }
 
-    public void startIntentService (String string){
+    public void startIntentService (String searchString, int startNumber ){
 
         Intent serviceIntent = new Intent(this, apiService.class);
         serviceIntent.putExtra(apiService.EXTRA_RESULT_RECEIVER, new apiResultReceiver());
-        serviceIntent.putExtra("String", string);
+        serviceIntent.putExtra("String", searchString);
+        serviceIntent.putExtra("startNumber", startNumber);
         progressBar.setVisibility(View.VISIBLE);
         startService(serviceIntent);
 

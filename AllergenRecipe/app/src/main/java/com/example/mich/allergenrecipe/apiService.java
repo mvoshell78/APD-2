@@ -33,12 +33,13 @@ public class apiService extends IntentService {
 
 
         String searchString = intent.getStringExtra("String");
+        int startNumber = intent.getIntExtra("startNumber",0);
 
         ArrayList<RecipeData> data = null;
         if (isOnline()){
 
 
-            data = GetApiData.getRecipeData(searchString);
+            data = GetApiData.getRecipeData(searchString , startNumber);
             StorageClass storageClass = new StorageClass();
             storageClass.saveData(data, MainActivity.context, searchString);
 
