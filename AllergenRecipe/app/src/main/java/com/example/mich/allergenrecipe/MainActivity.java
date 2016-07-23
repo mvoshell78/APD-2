@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     boolean selectedSearch = false;
     int startNumber;
     String getItemSelected;
+    RelativeLayout relativeLayout;
 
 
 
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        relativeLayout = (RelativeLayout) findViewById(R.id.transparentOverlay);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
@@ -229,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             ListFragment fragment = (ListFragment) getFragmentManager().findFragmentByTag(ListFragment.TAG);
 
             fragment.setUpList(recipeData);
+            relativeLayout.setVisibility(2);
 
         }
     }
