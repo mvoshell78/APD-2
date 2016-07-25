@@ -98,7 +98,7 @@ public class settingsFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
                 String selectedItem =  newValue.toString();
-                selectedItem = selectedItem.toLowerCase();
+
 
                 for (int i = 0; i< yourAllergenListArray.size(); i++){
                     if (yourAllergenListArray.get(i).getAllergenKey().equals(selectedItem)){
@@ -217,19 +217,41 @@ public class settingsFragment extends PreferenceFragment {
 
     }
 
+//    public void checkTheList(String addAllergensPreferenceText ){
+//        yourAllergenListArray = storePreferencesClass.readFromStorage(getContext(),yourAllergenList);
+//
+//        if (yourAllergenListArray.size() > 0 ){
+//            for (int i = 0; i< yourAllergenListArray.size(); i++){
+//                if (addAllergensPreferenceText.equals(yourAllergenListArray.get(i).getAllergenKey())){
+//                    Toast.makeText(MainActivity.context, addAllergensPreferenceText + " is already in your list",Toast.LENGTH_SHORT).show();
+//
+//                } else {
+//                    createCheckBoxPreference(addAllergensPreferenceText);
+//
+//                }
+//            }
+//
+//        } else {
+//            createCheckBoxPreference(addAllergensPreferenceText);
+//
+//        }
+//    }
+
     public void createCheckBoxPreference(final String addAllergensPreferenceText){
         // adds a new check box preference
+
 
         PreferenceCategory category = (PreferenceCategory)findPreference("added_allergies");
 
         CheckBoxPreference checkboxPref = new CheckBoxPreference(getContext());
 
         checkboxPref.setTitle(addAllergensPreferenceText);
+
         checkboxPref.setKey(addAllergensPreferenceText);
         checkboxPref.setChecked(true);
         category.addPreference(checkboxPref);
-        AllergenListData yourAllergen =  new AllergenListData(addAllergensPreferenceText,addAllergensPreferenceText.toLowerCase(),true);
-
+        AllergenListData yourAllergen =  new AllergenListData(addAllergensPreferenceText,addAllergensPreferenceText,true);
+        yourAllergenListArray = storePreferencesClass.readFromStorage(getContext(),yourAllergenList);
         yourAllergenListArray.add(yourAllergen);
         storePreferencesClass.saveData(yourAllergenListArray,getContext(),yourAllergenList);
         Preference myCheckbox = findPreference(addAllergensPreferenceText);
@@ -238,8 +260,8 @@ public class settingsFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 for (int i = 0; i< yourAllergenListArray.size(); i++){
 
-                    if (String.valueOf(addAllergensPreferenceText.toLowerCase()).equals(String.valueOf(preference.getKey()))) {
-                       yourAllergenListArray.get(i).setBool((Boolean) newValue);
+                    if (String.valueOf(addAllergensPreferenceText).equals(String.valueOf(preference.getKey()))) {
+                        yourAllergenListArray.get(i).setBool((Boolean) newValue);
                         storePreferencesClass.saveData(yourAllergenListArray,getContext(),yourAllergenList);
 
 
@@ -249,12 +271,10 @@ public class settingsFragment extends PreferenceFragment {
                 return true;
             }
         });
-
-
     }
     public void removeCheckBoxPreference(String removeAllergensPreferenceText){
         // removes preferences from the list
-        removeAllergensPreferenceText = removeAllergensPreferenceText.toLowerCase();
+        //removeAllergensPreferenceText = removeAllergensPreferenceText.toLowerCase();
         PreferenceCategory category = (PreferenceCategory)findPreference("added_allergies");
         PreferenceScreen screen = getPreferenceScreen();
         Preference pref = getPreferenceManager().findPreference(removeAllergensPreferenceText);
@@ -265,13 +285,13 @@ public class settingsFragment extends PreferenceFragment {
            e.printStackTrace();
        }
 
-        storePreferencesClass = new StorePreferencesClass();
-        yourAllergenListArray = storePreferencesClass.readFromStorage(getContext(),yourAllergenList);
-        for (int i = 0; i< yourAllergenListArray.size(); i++){
-            if (yourAllergenListArray.get(i).getAllergenKey().equals(removeAllergensPreferenceText)){
-                yourAllergenListArray.remove(i);
-            }
-        }
+//        storePreferencesClass = new StorePreferencesClass();
+//        yourAllergenListArray = storePreferencesClass.readFromStorage(getContext(),yourAllergenList);
+//        for (int i = 0; i< yourAllergenListArray.size(); i++){
+//            if (yourAllergenListArray.get(i).getAllergenKey().equals(removeAllergensPreferenceText)){
+//                yourAllergenListArray.remove(i);
+//            }
+//        }
 
 
     }
