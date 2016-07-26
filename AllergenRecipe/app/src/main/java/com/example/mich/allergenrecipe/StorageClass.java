@@ -20,12 +20,12 @@ import java.util.ArrayList;
  */
 public class StorageClass {
 
-    private ArrayList<RecipeData> mWeather;
+    private ArrayList<RecipeData> mRecipe;
 
     static String imageString;
 
 
-    public void saveData(ArrayList<RecipeData> PeopleList, Context context, String storageType)  {
+    public void saveData(ArrayList<RecipeData> RecepieList, Context context, String storageType)  {
 
         // creates a var from the item selectedSettings to write the data to
         String FILENAME = storageType + ".txt";
@@ -33,15 +33,15 @@ public class StorageClass {
 
         try {
             // writeing the data
-            FileOutputStream fileOutputStream = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
+            FileOutputStream fileOutputStream = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
-            objectOutputStream.writeObject(PeopleList);
+            objectOutputStream.writeObject(RecepieList);
             objectOutputStream.close();
 
-            for (int i = 0; i < PeopleList.size(); i++) {
-            String imageURL = PeopleList.get(i).getSmallImageUrl();
+            for (int i = 0; i < RecepieList.size(); i++) {
+            String imageURL = RecepieList.get(i).getSmallImageUrl();
             imageString = imageURL.toLowerCase().replaceAll("\\s+","").replace("/", "").replace(":", "").replace(".", "").trim();
             //Download the Image
             try {
@@ -78,19 +78,19 @@ public class StorageClass {
         //Toast.makeText(this, FILENAME, Toast.LENGTH_SHORT).show();
 
         // creates a place to write the data to
-        mWeather = new ArrayList<RecipeData>();
+        mRecipe = new ArrayList<RecipeData>();
         try{
             // read that data
             FileInputStream fileInputStream = context.openFileInput(FILENAME);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            mWeather = (ArrayList<RecipeData>) objectInputStream.readObject();
+            mRecipe = (ArrayList<RecipeData>) objectInputStream.readObject();
             // Toast.makeText(context,"Read Succesfull", Toast.LENGTH_SHORT).show();
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
         }
 
 
-        return mWeather;
+        return mRecipe;
     }
 
     public static String readImageFromStorage(Context context, String urlString){

@@ -6,5 +6,9 @@
     <string name="chineese">Chineese</string>
     <string name="american">American</string>
     <string name="action_search">Search</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="action_favorite">Favorite</string>
+    <string name="action_share">Share</string>
+    <string name="action_delete">Delete</string>
 
 </resources>

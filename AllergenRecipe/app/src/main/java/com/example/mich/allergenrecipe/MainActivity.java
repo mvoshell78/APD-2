@@ -23,7 +23,8 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ActionBar.OnNavigationListener, searchTextInterface{
+public class MainActivity extends AppCompatActivity implements ActionBar.OnNavigationListener, searchTextInterface, FragmentActivityInterface{
+
 
 
     static final android.os.Handler mHandler = new android.os.Handler();
@@ -34,11 +35,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     boolean selectedSettings = false;
     boolean selectedSearch = false;
     int startNumber;
-    String getItemSelected;
+    String getItemSelected = "";
     RelativeLayout relativeLayout;
-
-
-
     String spinnerArray[];
     FloatingActionButton fab;
     ProgressBar progressBar;
@@ -59,22 +57,12 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         createFrag();
         startNumber = 0;
 
-
-
-
-
         context=this;
-
-
-
 
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_nav);
 
         spinnerArray = new String[]{"Favorites","American", "Chineese", "Italian", "Mexican"};
 
-
-
-//        Spinner spinner = new Spinner(this);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
@@ -83,15 +71,25 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int i, long id) {
 
+                getItemSelected = spinnerArray[i];
+
                 if (i == 0){
+
+                    StorageClass storageClass = new StorageClass();
+                    recipeData = storageClass.readFromStorage(context,"favorites");
+
+                    ListFragment fragment = (ListFragment) getFragmentManager().findFragmentByTag(ListFragment.TAG);
+                    fragment.setUpList(recipeData);
+
+                    relativeLayout.setVisibility(2);
 
                     fab.hide();
                 }
                 if (i > 0 ){
-                getItemSelected = spinnerArray[i];
-                startNumber = 0;
 
+                startNumber = 0;
                 startIntentService(getItemSelected, startNumber);
+
                 }
 
 
@@ -214,6 +212,21 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
     }
 
+    @Override
+    public void passItemFragActivity(int item) {
+
+        RecipeData selectedRecipie =  recipeData.get(item);
+
+        Intent detailIntent =  new Intent(this, DetailActivity.class);
+        detailIntent.putExtra("recipieData", selectedRecipie);
+        detailIntent.putExtra("itemSelected", getItemSelected);
+        detailIntent.putExtra("item",item);
+
+        startActivity(detailIntent);
+
+    }
+
+
     public class apiResultReceiver extends ResultReceiver {
 
         public apiResultReceiver() {
@@ -236,6 +249,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
         }
     }
+
+
 
     public void startIntentService (String searchString, int startNumber ){
 
@@ -288,8 +303,22 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             selectedSettings = true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        if(getItemSelected.equals("Favorites")){
+            StorageClass storageClass = new StorageClass();
+            recipeData = storageClass.readFromStorage(context,"favorites");
+
+            ListFragment fragment = (ListFragment) getFragmentManager().findFragmentByTag(ListFragment.TAG);
+            fragment.setUpList(recipeData);
+
+            relativeLayout.setVisibility(2);
+
+        }
     }
+}
 
 
 

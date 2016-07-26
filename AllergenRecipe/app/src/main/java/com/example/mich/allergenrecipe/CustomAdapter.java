@@ -22,18 +22,27 @@ import java.util.ArrayList;
 public class CustomAdapter extends BaseAdapter {
     ArrayList<String> result;
     ArrayList<String> imageId;
+    ArrayList<Integer> ratingC;
     Context context;
+    listClickInterface listener;
 
     private static LayoutInflater inflater = null;
 
-    public CustomAdapter(MainActivity mainActivity, ArrayList<String> recipieNameList, ArrayList<String> recipieImageUrlString) {
+    public CustomAdapter(MainActivity mainActivity, ArrayList<String> recipieNameList, ArrayList<String> recipieImageUrlString, ArrayList<Integer> ratingCount, listClickInterface callback) {
 
 
         result = recipieNameList;
         context = mainActivity;
+        ratingC = ratingCount;
 
         imageId = recipieImageUrlString;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.listener = callback;
+
+
+    }
+    private CustomAdapter(listClickInterface listClickInterface){
+        this.listener = listClickInterface;
     }
 
     @Override
@@ -66,10 +75,13 @@ public class CustomAdapter extends BaseAdapter {
         View rowView = inflater.inflate(R.layout.recipie_list, null);
 
         TextView textView = (TextView) rowView.findViewById(R.id.textView1);
+        TextView rating = (TextView) rowView.findViewById(R.id.textView2);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
         String urlString = imageId.get(position);
         String filename = StorageClass.readImageFromStorage(context, urlString);
         textView.setText(result.get(position));
+        rating.setText("Rating " + ratingC.get(position).toString());
+
 
         try {
 
@@ -80,11 +92,13 @@ public class CustomAdapter extends BaseAdapter {
         }
 
 
+
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(context, "You Clicked " + result.get(position), Toast.LENGTH_LONG).show();
+
+                listener.itemclicked(position);
             }
         });
         return rowView;

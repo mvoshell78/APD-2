@@ -53,7 +53,7 @@ public class GetApiData {
 
         String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=" + string + "&requirePictures=true" + allergenExclusion +"&maxResult=" + resultNumber +"&start=" + startNumber;
 
-       //String urlString = "http://api.yummly.com/v1/api/recipe/French-Onion-Soup-The-Pioneer-Woman-Cooks-_-Ree-Drummond-41364?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42";
+       //
         String resourceData = "No Data";
 
         try {
@@ -107,6 +107,8 @@ public class GetApiData {
                         JSONObject getArrayAtIndex = levelOne.getJSONObject(ii);
                         String getRecipeName = getArrayAtIndex.getString("recipeName");
                         JSONObject getimageUrl = getArrayAtIndex.getJSONObject("imageUrlsBySize");
+                        String getRating = getArrayAtIndex.getString("rating");
+                        int convertedRating = Integer.parseInt(getRating);
 
                         String getImageURL =  getimageUrl.getString("90");
                         //getImageURL = getImageURL.replace("", "");
@@ -134,7 +136,7 @@ public class GetApiData {
                             ingredientsList.add(ingredient);
                         }
                         RecipeData recipeData;
-                        recipeData = new RecipeData(getRecipeName,getImageURL,getRecipeID,ingredientsList);
+                        recipeData = new RecipeData(getRecipeName,getImageURL,getRecipeID,convertedRating,ingredientsList);
                         recpieDataArrayList.add(recipeData);
                     }
 

@@ -1,5 +1,6 @@
 package com.example.mich.allergenrecipe;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,16 +14,31 @@ import java.util.ArrayList;
 /**
  * Created by Mich on 7/14/16.
  */
-public class ListFragment extends Fragment{
+public class ListFragment extends Fragment implements listClickInterface{
     public static final String TAG = "ListFragment";
     private static String ARG = "arg";
     static ListView lv;
+    FragmentActivityInterface listener;
+
 
    // getListPosition listener;
     public ListFragment(){
 
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof searchTextInterface){
+
+            listener = (FragmentActivityInterface) activity;
+
+        } else {
+
+            throw new IllegalArgumentException("not connected");
+
+        }
+    }
 //    @Override
 //    public void onAttach(Activity activity) {
 //        super.onAttach(activity);
@@ -72,23 +88,34 @@ public class ListFragment extends Fragment{
 
 
 
-    public static void setUpList(ArrayList<RecipeData> recipeData){
+    public void setUpList(ArrayList<RecipeData> recipeData){
 
         ArrayList<String> recipieNames = null;
         ArrayList<String> recipieImageUrl = null;
+        ArrayList<Integer> ratingCount = null;
         recipieNames = new ArrayList<>();
         recipieImageUrl = new ArrayList<>();
+        ratingCount = new ArrayList<>();
             if (recipeData!= null){
                 for (int i=0; i< recipeData.size(); i++){
 
                     String name = recipeData.get(i).getRecipeName();
                     String imageUrl = recipeData.get(i).getSmallImageUrl();
+                    int rating = recipeData.get(i).getmRating();
                     recipieNames.add(name);
                     recipieImageUrl.add(imageUrl);
+                    ratingCount.add(rating);
                 }
             }
 
 
-        lv.setAdapter(new CustomAdapter((MainActivity) MainActivity.context, recipieNames,recipieImageUrl));
+        lv.setAdapter(new CustomAdapter((MainActivity) MainActivity.context, recipieNames, recipieImageUrl, ratingCount, this));
+    }
+
+    @Override
+    public void itemclicked(int item) {
+
+
+        listener.passItemFragActivity(item);
     }
 }
