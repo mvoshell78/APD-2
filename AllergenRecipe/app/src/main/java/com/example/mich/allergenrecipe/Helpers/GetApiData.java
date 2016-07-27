@@ -1,7 +1,12 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.Helpers;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.example.mich.allergenrecipe.Activities.MainActivity;
+import com.example.mich.allergenrecipe.CustomClasses.AllergenListData;
+import com.example.mich.allergenrecipe.CustomClasses.RecipeData;
+import com.example.mich.allergenrecipe.Storage.StorePreferencesClass;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;

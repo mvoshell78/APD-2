@@ -1,4 +1,4 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import com.example.mich.allergenrecipe.R;
+import com.example.mich.allergenrecipe.interfaces.searchTextInterface;
 
 /**
  * Created by Mich on 7/14/16.

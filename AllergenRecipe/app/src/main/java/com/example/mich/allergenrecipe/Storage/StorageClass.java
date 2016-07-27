@@ -1,7 +1,9 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.Storage;
 
 import android.content.Context;
 import android.widget.Toast;
+
+import com.example.mich.allergenrecipe.CustomClasses.RecipeData;
 
 import org.apache.commons.io.IOUtils;
 

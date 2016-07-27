@@ -13,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mich.allergenrecipe.Activities.MainActivity;
+import com.example.mich.allergenrecipe.Storage.StorageClass;
+import com.example.mich.allergenrecipe.interfaces.listClickInterface;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -26,6 +30,7 @@ public class CustomAdapter extends BaseAdapter {
     Context context;
     listClickInterface listener;
 
+
     private static LayoutInflater inflater = null;
 
     public CustomAdapter(MainActivity mainActivity, ArrayList<String> recipieNameList, ArrayList<String> recipieImageUrlString, ArrayList<Integer> ratingCount, listClickInterface callback) {
@@ -38,6 +43,8 @@ public class CustomAdapter extends BaseAdapter {
         imageId = recipieImageUrlString;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.listener = callback;
+
+
 
 
     }
@@ -75,6 +82,7 @@ public class CustomAdapter extends BaseAdapter {
         View rowView = inflater.inflate(R.layout.recipie_list, null);
 
         TextView textView = (TextView) rowView.findViewById(R.id.textView1);
+
         TextView rating = (TextView) rowView.findViewById(R.id.textView2);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
         String urlString = imageId.get(position);
@@ -101,6 +109,8 @@ public class CustomAdapter extends BaseAdapter {
                 listener.itemclicked(position);
             }
         });
+
+
         return rowView;
     }
 

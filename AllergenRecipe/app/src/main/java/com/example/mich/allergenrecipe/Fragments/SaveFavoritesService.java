@@ -1,7 +1,11 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.Fragments;
 
 import android.app.IntentService;
 import android.content.Intent;
+
+import com.example.mich.allergenrecipe.Activities.DetailActivity;
+import com.example.mich.allergenrecipe.CustomClasses.RecipeData;
+import com.example.mich.allergenrecipe.Storage.StorageClass;
 
 import java.util.ArrayList;
 

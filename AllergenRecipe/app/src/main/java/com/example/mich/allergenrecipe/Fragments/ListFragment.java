@@ -1,4 +1,4 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.Fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -8,17 +8,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+
+import com.example.mich.allergenrecipe.Activities.MainActivity;
+import com.example.mich.allergenrecipe.CustomAdapter;
+import com.example.mich.allergenrecipe.R;
+import com.example.mich.allergenrecipe.CustomClasses.RecipeData;
+import com.example.mich.allergenrecipe.interfaces.FragmentActivityInterface;
+import com.example.mich.allergenrecipe.interfaces.listClickInterface;
+import com.example.mich.allergenrecipe.interfaces.searchTextInterface;
 
 import java.util.ArrayList;
 
 /**
  * Created by Mich on 7/14/16.
  */
-public class ListFragment extends Fragment implements listClickInterface{
+public class ListFragment extends Fragment implements listClickInterface {
     public static final String TAG = "ListFragment";
     private static String ARG = "arg";
     static ListView lv;
     FragmentActivityInterface listener;
+    ProgressBar progressBar;
 
 
    // getListPosition listener;
@@ -67,6 +77,8 @@ public class ListFragment extends Fragment implements listClickInterface{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list_fragement, container, false);
         lv = (ListView) v.findViewById(R.id.listView);
+       progressBar = (ProgressBar) ((MainActivity) getActivity()).findViewById(R.id.progressBar);
+
 
 
         return v;
@@ -110,6 +122,7 @@ public class ListFragment extends Fragment implements listClickInterface{
 
 
         lv.setAdapter(new CustomAdapter((MainActivity) MainActivity.context, recipieNames, recipieImageUrl, ratingCount, this));
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override

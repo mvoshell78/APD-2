@@ -1,13 +1,13 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.Services;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.widget.Toast;
+
+import com.example.mich.allergenrecipe.Activities.DetailActivity;
+import com.example.mich.allergenrecipe.CustomClasses.SelectedRecepieData;
+import com.example.mich.allergenrecipe.Helpers.GetSelectedItemsData;
 
 import org.json.JSONException;
 
@@ -24,7 +24,7 @@ public class detailService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        if(isOnline()){
+
             String recipieId = intent.getStringExtra("String");
 
             try {
@@ -32,9 +32,9 @@ public class detailService extends IntentService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            String test = "";
 
-        }
+
+
         ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RESULT_RECEIVER);
 
         Bundle dataBundle =  new Bundle();
@@ -45,20 +45,5 @@ public class detailService extends IntentService {
 
     }
 
-    protected boolean isOnline() {
 
-        ConnectivityManager mgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = mgr.getActiveNetworkInfo();
-
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-
-            return true;
-
-        } else{
-
-            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
-
-            return false;
-        }
-    }
 }

@@ -1,4 +1,4 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.interfaces;
 
 /**
  * Created by Mich on 7/25/16.

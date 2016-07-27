@@ -1,15 +1,16 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.Services;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
+
+import com.example.mich.allergenrecipe.Activities.MainActivity;
+import com.example.mich.allergenrecipe.Helpers.GetApiData;
+import com.example.mich.allergenrecipe.CustomClasses.RecipeData;
+import com.example.mich.allergenrecipe.Storage.StorageClass;
 
 import java.util.ArrayList;
 
@@ -17,12 +18,12 @@ import java.util.ArrayList;
  * Created by Mich on 6/14/16.
  */
 public class apiService extends IntentService {
-
     public static final String EXTRA_RESULT_RECEIVER = "com.fullsail.android.EXTRA_RESULT_RECEIVER";
 
 
    public apiService(){
        super("apiService");
+
    }
 
     @Override
@@ -36,18 +37,12 @@ public class apiService extends IntentService {
         int startNumber = intent.getIntExtra("startNumber",0);
 
         ArrayList<RecipeData> data = null;
-        if (isOnline()){
+
 
 
             data = GetApiData.getRecipeData(searchString , startNumber);
             StorageClass storageClass = new StorageClass();
             storageClass.saveData(data, MainActivity.context, searchString);
-
-        } else {
-           StorageClass storageClass = new StorageClass();
-            data = storageClass.readFromStorage(getBaseContext(),searchString );
-
-        }
 
         ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RESULT_RECEIVER);
 
@@ -61,21 +56,8 @@ public class apiService extends IntentService {
 
     }
 
-    protected boolean isOnline() {
 
-        ConnectivityManager mgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = mgr.getActiveNetworkInfo();
 
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
 
-            return true;
-
-        } else{
-
-            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
-
-            return false;
-        }
-    }
 
 }

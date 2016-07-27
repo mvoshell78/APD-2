@@ -1,4 +1,6 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.Helpers;
+
+import com.example.mich.allergenrecipe.CustomClasses.SelectedRecepieData;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -71,7 +73,7 @@ public class GetSelectedItemsData {
         if (apiData != null) {
             try {
                  yield = apiData.getString("yield");
-                
+
             } catch (Exception e){
             yield = "Not Available";
             }

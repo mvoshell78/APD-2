@@ -1,4 +1,4 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.CustomClasses;
 
 import java.io.Serializable;
 

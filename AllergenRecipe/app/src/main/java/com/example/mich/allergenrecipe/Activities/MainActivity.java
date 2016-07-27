@@ -1,10 +1,12 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.Activities;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.preference.PreferenceManager;
@@ -20,10 +22,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.example.mich.allergenrecipe.interfaces.FragmentActivityInterface;
+import com.example.mich.allergenrecipe.Fragments.ListFragment;
+import com.example.mich.allergenrecipe.R;
+import com.example.mich.allergenrecipe.CustomClasses.RecipeData;
+import com.example.mich.allergenrecipe.Fragments.SearchFragment;
+import com.example.mich.allergenrecipe.Storage.StorageClass;
+import com.example.mich.allergenrecipe.Services.apiService;
+import com.example.mich.allergenrecipe.interfaces.searchTextInterface;
+import com.example.mich.allergenrecipe.Fragments.settingsFragment;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ActionBar.OnNavigationListener, searchTextInterface, FragmentActivityInterface{
+public class MainActivity extends AppCompatActivity implements ActionBar.OnNavigationListener, searchTextInterface, FragmentActivityInterface {
 
 
 
@@ -41,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     FloatingActionButton fab;
     ProgressBar progressBar;
 
-    static Context context;
+    public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,18 +88,26 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
                 if (i == 0){
 
+                    progressBar.setVisibility(View.VISIBLE);
                     StorageClass storageClass = new StorageClass();
                     recipeData = storageClass.readFromStorage(context,"favorites");
+                    if(recipeData.size() > 0 ) {
+                        relativeLayout.setVisibility(2);
+                    } else {
+                        relativeLayout.setVisibility(View.INVISIBLE);
+                    }
 
                     ListFragment fragment = (ListFragment) getFragmentManager().findFragmentByTag(ListFragment.TAG);
                     fragment.setUpList(recipeData);
 
-                    relativeLayout.setVisibility(2);
+
+
 
                     fab.hide();
                 }
                 if (i > 0 ){
 
+                progressBar.setVisibility(View.VISIBLE);
                 startNumber = 0;
                 startIntentService(getItemSelected, startNumber);
 
@@ -181,7 +202,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
                } else {
                    fragmentTransaction.hide(fragment);
-                   fab.show();
+                   if(recipeData.size() > 0 ){
+                       fab.show();
+                   }
+
 
                }
 
@@ -205,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
     @Override
     public void searchText(String searchTxt) {
-         startNumber = 0;
+        startNumber = 0;
         getItemSelected = searchTxt;
         startIntentService(searchTxt, startNumber);
         createSearchFragment();
@@ -252,15 +276,34 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
 
 
-    public void startIntentService (String searchString, int startNumber ){
+    public void startIntentService (String searchString, int startNumber ) {
 
-        Intent serviceIntent = new Intent(this, apiService.class);
-        serviceIntent.putExtra(apiService.EXTRA_RESULT_RECEIVER, new apiResultReceiver());
-        serviceIntent.putExtra("String", searchString);
-        serviceIntent.putExtra("startNumber", startNumber);
-        progressBar.setVisibility(View.VISIBLE);
-        startService(serviceIntent);
+        if (isOnline()) {
 
+            Intent serviceIntent = new Intent(this, apiService.class);
+            serviceIntent.putExtra(apiService.EXTRA_RESULT_RECEIVER, new apiResultReceiver());
+            serviceIntent.putExtra("String", searchString);
+            serviceIntent.putExtra("startNumber", startNumber);
+
+            startService(serviceIntent);
+        } else {
+
+            recipeData = null;
+            Toast.makeText(context, "Not connected to the internet", Toast.LENGTH_LONG).show();
+            StorageClass storageClass = new StorageClass();
+            recipeData = storageClass.readFromStorage(getBaseContext(), searchString);
+            if (recipeData.size() ==  0) {
+                Toast.makeText(context, "there are no saved items for " + getItemSelected, Toast.LENGTH_SHORT).show();
+            } else {
+                ListFragment fragment = (ListFragment) getFragmentManager().findFragmentByTag(ListFragment.TAG);
+
+                fragment.setUpList(recipeData);
+                relativeLayout.setVisibility(2);
+                Toast.makeText(context, "Some items may not be available", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
     }
 
     public void createFrag(){
@@ -313,9 +356,29 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
             ListFragment fragment = (ListFragment) getFragmentManager().findFragmentByTag(ListFragment.TAG);
             fragment.setUpList(recipeData);
+            if(recipeData.size() > 0){
+                relativeLayout.setVisibility(2);
+            } else {
+                relativeLayout.setVisibility(View.INVISIBLE);
+            }
 
-            relativeLayout.setVisibility(2);
 
+        }
+    }
+
+    protected boolean isOnline() {
+
+        ConnectivityManager mgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = mgr.getActiveNetworkInfo();
+
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+
+            return true;
+
+        } else{
+
+
+            return false;
         }
     }
 }

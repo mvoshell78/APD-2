@@ -1,9 +1,13 @@
-package com.example.mich.allergenrecipe;
+package com.example.mich.allergenrecipe.Activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +23,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mich.allergenrecipe.R;
+import com.example.mich.allergenrecipe.CustomClasses.RecipeData;
+import com.example.mich.allergenrecipe.Fragments.SaveFavoritesService;
+import com.example.mich.allergenrecipe.CustomClasses.SelectedRecepieData;
+import com.example.mich.allergenrecipe.Storage.StorageClass;
+import com.example.mich.allergenrecipe.Services.detailService;
+
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -39,7 +51,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     TextView ingredient;
     SelectedRecepieData selectedRecepieData;
     String favorites = "favorites";
-    static Context context;
+    public static Context context;
     int itemNumber;
 
     @Override
@@ -69,12 +81,33 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         favoriteRecepies = new ArrayList<RecipeData>();
 
 
+        if (isOnline()){
+            Intent serviceIntent = new Intent(this, detailService.class);
+            serviceIntent.putExtra(detailService.EXTRA_RESULT_RECEIVER, new apiResultReceiver());
+            serviceIntent.putExtra("String", recipeData.getId());
+            startService(serviceIntent);
+        } else {
+            recipieName.setText(recipeData.getRecipeName());
+            ArrayList<String> ingredients = recipeData.getIngredientsList();
+            ingredient.setText("Ingredients : ");
+            String urlString = recipeData.getSmallImageUrl();
+            String filename = StorageClass.readImageFromStorage(context, urlString);
+            try {
+
+                imageView.setImageBitmap(copyBitmap(BitmapFactory.decodeStream(context.openFileInput(filename))));
+            } catch (FileNotFoundException e) {
+                Toast.makeText(MainActivity.context, "image not set", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            for (int i = 0; i < ingredients.size(); i++ ){
+                final TextView ingredientTextView = new TextView(DetailActivity.this);
+                ingredientTextView.setText(ingredients.get(i));
+
+                layout.addView(ingredientTextView);
+            }
+        }
 
 
-        Intent serviceIntent = new Intent(this, detailService.class);
-        serviceIntent.putExtra(detailService.EXTRA_RESULT_RECEIVER, new apiResultReceiver());
-        serviceIntent.putExtra("String", recipeData.getId());
-        startService(serviceIntent);
 
 
 
@@ -160,7 +193,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(this,"clicked",Toast.LENGTH_SHORT).show();
+
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedRecepieData.getmUrl()));
         startActivity(browserIntent);
     }
@@ -245,5 +278,34 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
         }
+    }
+    protected boolean isOnline() {
+
+        ConnectivityManager mgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = mgr.getActiveNetworkInfo();
+
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+
+            return true;
+
+        } else{
+
+
+            return false;
+        }
+    }
+
+    public static Bitmap copyBitmap(Bitmap bmp) {
+        try {
+            Bitmap copy = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas copyCanvas = new Canvas(copy);
+            copyCanvas.drawBitmap(bmp, new Matrix(), null);
+            return copy;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        return null;
     }
 }

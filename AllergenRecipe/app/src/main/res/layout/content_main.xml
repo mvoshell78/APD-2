@@ -10,18 +10,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/background"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.mich.allergenrecipe.MainActivity"
+    tools:context=".Activities.MainActivity"
     tools:showIn="@layout/activity_main"
     >
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center" />
+
 
     <RelativeLayout
         android:id="@+id/transparentOverlay"
@@ -55,5 +48,12 @@
         android:id="@+id/settingsContainer">
     </RelativeLayout>
 
-
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center" />
 </FrameLayout>
