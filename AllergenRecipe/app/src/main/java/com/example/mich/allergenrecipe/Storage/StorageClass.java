@@ -42,33 +42,38 @@ public class StorageClass {
             objectOutputStream.writeObject(RecepieList);
             objectOutputStream.close();
 
-            for (int i = 0; i < RecepieList.size(); i++) {
-            String imageURL = RecepieList.get(i).getSmallImageUrl();
-            imageString = imageURL.toLowerCase().replaceAll("\\s+","").replace("/", "").replace(":", "").replace(".", "").trim();
-            //Download the Image
-            try {
-                URLConnection connection = new URL(imageURL).openConnection();
-                connection.setConnectTimeout(10000); // 10 seconds
-                connection.setReadTimeout(10000);
-                FileOutputStream file = context.openFileOutput(imageString, Context.MODE_PRIVATE);
-                IOUtils.copy(connection.getInputStream(), file);
-                IOUtils.closeQuietly(file);
+            if (RecepieList != null) {
+                for (int i = 0; i < RecepieList.size(); i++) {
 
-                } catch (IOException e) {
+                    String imageURL = RecepieList.get(i).getSmallImageUrl();
+                    String imageName = RecepieList.get(i).getmCatagory();
+                    //Download the Image
+                    try {
+                        URLConnection connection = new URL(imageURL).openConnection();
+                        connection.setConnectTimeout(10000); // 10 seconds
+                        connection.setReadTimeout(10000);
+                        FileOutputStream file = context.openFileOutput(imageName, Context.MODE_PRIVATE);
+                        IOUtils.copy(connection.getInputStream(), file);
+                        IOUtils.closeQuietly(file);
 
-                e.printStackTrace();
+                    } catch (IOException e) {
+
+                        e.printStackTrace();
+                    }
                 }
             }
 
-            // user feedback to let them know the save was successful
-             //Toast.makeText(context, "Saved Succesful", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(context, "Error Item Not Saved", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(context, "Error Item Not Saved", Toast.LENGTH_SHORT).show();
-        }
+
+                // user feedback to let them know the save was successful
+                //Toast.makeText(context, "Saved Succesful", Toast.LENGTH_SHORT).show();
+            }catch(FileNotFoundException e){
+                e.printStackTrace();
+                Toast.makeText(context, "Error Item Not Saved", Toast.LENGTH_SHORT).show();
+            }catch(IOException e){
+                e.printStackTrace();
+                Toast.makeText(context, "Error Item Not Saved", Toast.LENGTH_SHORT).show();
+            }
+
     }
 
     // read the data from storage
@@ -95,15 +100,7 @@ public class StorageClass {
         return mRecipe;
     }
 
-    public static String readImageFromStorage(Context context, String urlString){
 
-        String[] filenames = context.fileList();
-        for (String filename : filenames) {
-            if(filename.contains(urlString.toLowerCase().replaceAll("\\s+","").replace("/", "").replace(":", "").replace(".", "").trim()))
-            imageString = filename;
-            }
-        return imageString;
-    }
 
 }
 

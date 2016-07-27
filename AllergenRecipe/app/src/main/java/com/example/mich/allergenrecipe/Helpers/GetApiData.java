@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class GetApiData {
 
 
-    public static ArrayList<RecipeData> getRecipeData(String string, int startNumber) {
+    public static ArrayList<RecipeData> getRecipeData(String catagory, int startNumber) {
         ArrayList<RecipeData> recpieDataArrayList = null;
         HttpURLConnection connection;
 
@@ -56,7 +56,7 @@ public class GetApiData {
             }
 
 
-        String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=" + string + "&requirePictures=true" + allergenExclusion +"&maxResult=" + resultNumber +"&start=" + startNumber;
+        String urlString = "http://api.yummly.com/v1/api/recipes?_app_id=f17f1694&_app_key=4c21ee62419a9c4984c9d5d0efe35c42&q=" + catagory + "&requirePictures=true" + allergenExclusion +"&maxResult=" + resultNumber +"&start=" + startNumber;
 
        //
         String resourceData = "No Data";
@@ -112,7 +112,22 @@ public class GetApiData {
                         JSONObject getArrayAtIndex = levelOne.getJSONObject(ii);
                         String getRecipeName = getArrayAtIndex.getString("recipeName");
                         JSONObject getimageUrl = getArrayAtIndex.getJSONObject("imageUrlsBySize");
+                        JSONObject getCuisine = getArrayAtIndex.getJSONObject("attributes");
+                        JSONArray cuisineArray;
+                        String cuisine = "";
+                        try{
+                            cuisineArray = getCuisine.getJSONArray("cuisine");
+                            cuisine = (String) cuisineArray.get(0);
+                       } catch (JSONException e){
+                           e.printStackTrace();
+
+                       }
+
+
+
+
                         String getRating = getArrayAtIndex.getString("rating");
+
                         int convertedRating = Integer.parseInt(getRating);
 
                         String getImageURL =  getimageUrl.getString("90");
@@ -141,7 +156,7 @@ public class GetApiData {
                             ingredientsList.add(ingredient);
                         }
                         RecipeData recipeData;
-                        recipeData = new RecipeData(getRecipeName,getImageURL,getRecipeID,convertedRating,ingredientsList);
+                        recipeData = new RecipeData(getRecipeName,getImageURL,getRecipeID,convertedRating,ingredientsList,catagory + ii, cuisine );
                         recpieDataArrayList.add(recipeData);
                     }
 

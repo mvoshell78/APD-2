@@ -14,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mich.allergenrecipe.Activities.MainActivity;
-import com.example.mich.allergenrecipe.Storage.StorageClass;
 import com.example.mich.allergenrecipe.interfaces.listClickInterface;
 
 import java.io.FileNotFoundException;
@@ -26,19 +25,26 @@ import java.util.ArrayList;
 public class CustomAdapter extends BaseAdapter {
     ArrayList<String> result;
     ArrayList<String> imageId;
+    ArrayList<String> imageName;
+    ArrayList<String> cuisineName;
     ArrayList<Integer> ratingC;
+
+
     Context context;
     listClickInterface listener;
 
 
     private static LayoutInflater inflater = null;
 
-    public CustomAdapter(MainActivity mainActivity, ArrayList<String> recipieNameList, ArrayList<String> recipieImageUrlString, ArrayList<Integer> ratingCount, listClickInterface callback) {
+    public CustomAdapter(MainActivity mainActivity, ArrayList<String> recipieNameList, ArrayList<String> recipieImageUrlString, ArrayList<Integer> ratingCount, listClickInterface callback, ArrayList<String> catagory, ArrayList<String> cuisine) {
 
 
         result = recipieNameList;
         context = mainActivity;
         ratingC = ratingCount;
+        imageName = catagory;
+        cuisineName = cuisine;
+
 
         imageId = recipieImageUrlString;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -83,17 +89,53 @@ public class CustomAdapter extends BaseAdapter {
 
         TextView textView = (TextView) rowView.findViewById(R.id.textView1);
 
-        TextView rating = (TextView) rowView.findViewById(R.id.textView2);
+        TextView cuisine = (TextView) rowView.findViewById(R.id.textView2);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
+        ImageView imageView1 = (ImageView) rowView.findViewById(R.id.star1);
+        ImageView imageView2 = (ImageView) rowView.findViewById(R.id.star2);
+        ImageView imageView3 = (ImageView) rowView.findViewById(R.id.star3);
+        ImageView imageView4 = (ImageView) rowView.findViewById(R.id.star4);
         String urlString = imageId.get(position);
-        String filename = StorageClass.readImageFromStorage(context, urlString);
+        String image = imageName.get(position);
         textView.setText(result.get(position));
-        rating.setText("Rating " + ratingC.get(position).toString());
+        if (cuisineName.get(position) == ""){
 
+        } else {
+            cuisine.setText("Cuisne : " + cuisineName.get(position) );
+        }
+
+            if (ratingC.get(position) == 1){
+                imageView1.setImageResource((R.drawable.starfull));
+                imageView2.setImageResource((R.drawable.starempty));
+                imageView3.setImageResource((R.drawable.starempty));
+                imageView4.setImageResource((R.drawable.starempty));
+
+            }
+            if (ratingC.get(position) == 2){
+                imageView1.setImageResource((R.drawable.starfull));
+                imageView2.setImageResource((R.drawable.starfull));
+                imageView3.setImageResource((R.drawable.starempty));
+                imageView4.setImageResource((R.drawable.starempty));
+
+            }
+            if (ratingC.get(position) == 3){
+                imageView1.setImageResource((R.drawable.starfull));
+                imageView2.setImageResource((R.drawable.starfull));
+                imageView3.setImageResource((R.drawable.starfull));
+                imageView4.setImageResource((R.drawable.starempty));
+
+            }
+            if (ratingC.get(position) == 4){
+                imageView1.setImageResource((R.drawable.starfull));
+                imageView2.setImageResource((R.drawable.starfull));
+                imageView3.setImageResource((R.drawable.starfull));
+                imageView4.setImageResource((R.drawable.starfull));
+
+            }
 
         try {
 
-            imageView.setImageBitmap(copyBitmap(BitmapFactory.decodeStream(context.openFileInput(filename))));
+            imageView.setImageBitmap(copyBitmap(BitmapFactory.decodeStream(context.openFileInput(image))));
         } catch (FileNotFoundException e) {
             Toast.makeText(MainActivity.context, "image not set", Toast.LENGTH_SHORT).show();
             e.printStackTrace();

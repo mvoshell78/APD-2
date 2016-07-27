@@ -49,15 +49,7 @@ public class ListFragment extends Fragment implements listClickInterface {
 
         }
     }
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//        if (activity instanceof getListPosition){
-//            listener = (getListPosition) activity;
-//        } else {
-//            throw new IllegalArgumentException("not connected");
-//        }
-//    }
+
 
     public static ListFragment newInstanceOf(ArrayList<RecipeData> fav ){
         ListFragment fragment = new ListFragment();
@@ -93,6 +85,7 @@ public class ListFragment extends Fragment implements listClickInterface {
 
         Bundle args = getArguments();
         if (args != null) {
+
             setUpList((ArrayList<RecipeData>) args.getSerializable(ARG));
 
         }
@@ -105,23 +98,36 @@ public class ListFragment extends Fragment implements listClickInterface {
         ArrayList<String> recipieNames = null;
         ArrayList<String> recipieImageUrl = null;
         ArrayList<Integer> ratingCount = null;
+        ArrayList<String> imageName = null;
+        ArrayList<String> cuisine =  null;
+
         recipieNames = new ArrayList<>();
         recipieImageUrl = new ArrayList<>();
         ratingCount = new ArrayList<>();
+        imageName =  new ArrayList<>();
+        cuisine = new ArrayList<>();
             if (recipeData!= null){
                 for (int i=0; i< recipeData.size(); i++){
 
                     String name = recipeData.get(i).getRecipeName();
                     String imageUrl = recipeData.get(i).getSmallImageUrl();
+                    String catagory = recipeData.get(i).getmCatagory();
+                    String cuisineName =  recipeData.get(i).getmCuisine();
                     int rating = recipeData.get(i).getmRating();
+
                     recipieNames.add(name);
                     recipieImageUrl.add(imageUrl);
                     ratingCount.add(rating);
+                    imageName.add(catagory);
+                    cuisine.add(cuisineName);
+
+
+
                 }
             }
 
 
-        lv.setAdapter(new CustomAdapter((MainActivity) MainActivity.context, recipieNames, recipieImageUrl, ratingCount, this));
+        lv.setAdapter(new CustomAdapter((MainActivity) MainActivity.context, recipieNames, recipieImageUrl, ratingCount, this, imageName, cuisine));
         progressBar.setVisibility(View.INVISIBLE);
     }
 

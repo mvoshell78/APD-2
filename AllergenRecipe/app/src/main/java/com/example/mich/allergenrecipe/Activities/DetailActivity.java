@@ -91,7 +91,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             ArrayList<String> ingredients = recipeData.getIngredientsList();
             ingredient.setText("Ingredients : ");
             String urlString = recipeData.getSmallImageUrl();
-            String filename = StorageClass.readImageFromStorage(context, urlString);
+            String filename = recipeData.getmCatagory();
             try {
 
                 imageView.setImageBitmap(copyBitmap(BitmapFactory.decodeStream(context.openFileInput(filename))));
