@@ -231,8 +231,14 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     public void searchText(String searchTxt) {
         startNumber = 0;
         getItemSelected = searchTxt;
+
+        searchFrag = (SearchFragment)getFragmentManager().findFragmentByTag(SearchFragment.TAG);
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        fragmentTransaction.hide(searchFrag);
+        fragmentTransaction.commit();
         startIntentService(searchTxt, startNumber);
-        createSearchFragment();
+        //createSearchFragment();
 
     }
 

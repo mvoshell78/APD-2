@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -105,6 +106,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
                 layout.addView(ingredientTextView);
             }
+            gotoWeb.setText("To view full recipe connect to internet");
+            gotoWeb.setTextColor(Color.BLACK);
         }
 
 
@@ -208,10 +211,20 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             super.onReceiveResult(resultCode, resultData);
+            ArrayList<String> ingredients = recipeData.getIngredientsList();
 
             selectedRecepieData = (SelectedRecepieData) resultData.getSerializable(ARG_API_INFO);
             recipieName.setText(recipeData.getRecipeName());
-            totalTime.setText("Total Time : " + selectedRecepieData.getmTotalTime());
+
+
+                if (selectedRecepieData.getmTotalTime().equals("null")) {
+                    totalTime.setText("");
+                } else {
+                    totalTime.setText("Total Time : " + selectedRecepieData.getmTotalTime());
+                }
+
+
+
             if (selectedRecepieData.getmImageUrl() == null){
                 imageView.setImageDrawable(getResources().getDrawable(R.drawable.noimageavailable));
 
@@ -220,10 +233,24 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 new DownloadImageTask(imageView).execute(selectedRecepieData.getmImageUrl());
             }
 
-            ArrayList<String> ingredients = recipeData.getIngredientsList();
-            source.setText("Recepie provided by " + selectedRecepieData.getmSource());
-            yield.setText("Serves : " + selectedRecepieData.getmYield());
-            if(selectedRecepieData.getmCookTime() == null){
+
+
+
+
+                    source.setText("Recepie provided by " + selectedRecepieData.getmSource());
+
+
+
+
+
+                if (selectedRecepieData.getmYield().equals("null")) {
+                    yield.setText("");
+                } else {
+                    yield.setText("Serves : " + selectedRecepieData.getmYield());
+                }
+
+
+
                 if(selectedRecepieData.getmCookTime().equals("null")){
                     cookTime.setText("");
                 } else {
@@ -231,10 +258,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 }
 
 
-            }
+
 
             ingredient.setText("Ingredients : ");
-            gotoWeb.setText("View full recepie");
+            gotoWeb.setText("View full recipe");
+
 
             for (int i = 0; i < ingredients.size(); i++ ){
                 final TextView ingredientTextView = new TextView(DetailActivity.this);
