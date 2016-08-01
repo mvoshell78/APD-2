@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_nav);
 
-        spinnerArray = new String[]{"Favorites","American", "Chineese", "Italian", "Mexican"};
+        spinnerArray = new String[]{"Favorites", "American", "Chineese", "Dessert","German", "Greek", "Indian", "Italian", "Jamican",  "Mexican"};
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
                 if (i == 0){
 
-                    progressBar.setVisibility(View.VISIBLE);
+                    //progressBar.setVisibility(View.VISIBLE);
                     StorageClass storageClass = new StorageClass();
                     recipeData = storageClass.readFromStorage(context,"favorites");
                     if(recipeData.size() > 0 ) {
@@ -285,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     public void startIntentService (String searchString, int startNumber ) {
 
         if (isOnline()) {
+            progressBar.setVisibility(View.VISIBLE);
 
             Intent serviceIntent = new Intent(this, apiService.class);
             serviceIntent.putExtra(apiService.EXTRA_RESULT_RECEIVER, new apiResultReceiver());
